@@ -29,7 +29,8 @@ const Container = styled.div<{ $isActive: boolean }>`
 
 const Emblem = styled.img`
   width: 100%;
-  aspect-ratio: 1 / 1;
+  height: 100%;
+  object-fit: contain;
   display: block; /* 하단 여백 제거 */
 `
 
