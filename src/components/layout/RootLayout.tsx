@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import Header from '../Header'
-import ClubViews from '../ClubViews'
 import { Outlet } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { GlobalStyle } from '@/styles/GlobalStyle'
@@ -26,7 +25,6 @@ function RootLayout() {
       <Header />
       <GlobalStyle />
       <Container>
-        <ClubViews />
         <Outlet />
       </Container>
     </>

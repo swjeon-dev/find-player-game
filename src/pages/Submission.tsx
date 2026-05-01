@@ -13,6 +13,7 @@ import { Helmet } from 'react-helmet-async'
 
 import useQuizGenerator from '@/hooks/useQuizGenerator'
 import { DEFAULT_API_PARAMS } from 'shared/params'
+import ClubViews from '@/components/ClubViews'
 
 const Container = styled.div`
   position: relative;
@@ -157,6 +158,7 @@ const Submission = () => {
       <Helmet>
         <title>Quiz | Find Football Player</title>
       </Helmet>
+      <ClubViews />
       <Container>
         <FormContainer>
           <Photo
