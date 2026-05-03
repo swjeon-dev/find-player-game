@@ -1,8 +1,14 @@
-import styled from 'styled-components'
-import Header from '../Header'
+import { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
+import styled from 'styled-components'
+
 import { GlobalStyle } from '@/styles/GlobalStyle'
+import { queryClient } from '@/queryClient'
+import { fetchPlayersDataInLeague } from '@/services/clientService'
+import { REACT_QUERY_OPTIONS } from '@/api'
+import Header from '../Header'
+import { DEFAULT_API_PARAMS } from 'shared/params'
 
 const Container = styled.div`
   display: flex;
@@ -17,6 +23,14 @@ const Container = styled.div`
 `
 
 function RootLayout() {
+  useEffect(() => {
+    queryClient.prefetchQuery({
+      queryKey: [DEFAULT_API_PARAMS.league, 'league', 'players'],
+      queryFn: () => fetchPlayersDataInLeague(DEFAULT_API_PARAMS.league),
+      ...REACT_QUERY_OPTIONS,
+    })
+  }, [])
+
   return (
     <>
       <Helmet>
