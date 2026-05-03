@@ -1,17 +1,11 @@
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import styled from 'styled-components'
 
 import { quizState } from '@/atoms/quizState'
-import useQuizGenerator from '@/hooks/useQuizGenerator'
-import routerPath from '@/constant/routerPath'
+import Modal from '@/components/Modal'
 
-interface IStartButton {
-  $isWait: boolean
-}
-
-const Button = styled.button<IStartButton>`
+const Button = styled.button`
   border: 1px solid white;
   width: 500px;
   height: 280px;
@@ -21,7 +15,7 @@ const Button = styled.button<IStartButton>`
   background-color: red;
   border-radius: 15px;
   &:hover {
-    cursor: ${props => (props.$isWait ? 'wait' : 'pointer')};
+    cursor: pointer;
   }
   z-index: 1;
   ${({ theme }) => theme.media.mobile} {
@@ -38,33 +32,25 @@ const Span = styled.span`
 // TODO: 임시 스쿼드 -> 전체 팀 스쿼드 변경
 export const Cover = () => {
   const quiz = useRecoilValue(quizState)
-  const navigate = useNavigate()
 
-  const { generateRandomPlayer } = useQuizGenerator()
+  // to after modal
+  // const { generateRandomPlayer } = useQuizGenerator()
 
-  useEffect(() => {
-    if (!quiz) {
-      generateRandomPlayer()
-    }
-  }, [generateRandomPlayer, quiz])
+  // useEffect(() => {
+  //   if (!quiz) {
+  //     generateRandomPlayer()
+  //   }
+  // }, [generateRandomPlayer, quiz])
 
+  const [onModal, setOnModal] = useState(false)
   const handleClick = () => {
-    if (!quiz) return
-
-    navigate(routerPath.SUBMISSION)
+    setOnModal(true)
   }
 
   return (
-    <Button $isWait={!quiz} onClick={handleClick}>
-      <Span>{!quiz ? '문제를 준비 중입니다' : 'Game Start'}</Span>
-    </Button>
-  )
-}
-
-export function RazyCover() {
-  return (
-    <Button $isWait={true}>
-      <Span>Stand by</Span>
+    <Button onClick={handleClick}>
+      <Span>Game Start</Span>
+      {onModal && <Modal closeModal={() => setOnModal(false)} />}
     </Button>
   )
 }
