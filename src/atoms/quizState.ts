@@ -17,3 +17,12 @@ export const inputState = atom<string>({
   key: 'answer',
   default: '',
 })
+
+// quiz range
+export const leagueInfoState = atom<{ id: number; season: number }>({
+  key: 'leagueInfo',
+  default: {
+    id: 0,
+    season: 2024,
+  },
+})

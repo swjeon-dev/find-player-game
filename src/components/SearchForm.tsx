@@ -1,9 +1,10 @@
-import styled from 'styled-components'
 import { useEffect, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
+import styled from 'styled-components'
+
 import useDebouncedValue from '@/hooks/useDebouncedValue'
-import AutoSearch from './AutoSearch'
 import { inputState } from '@/atoms/quizState'
+import AutoSearch from './AutoSearch'
 import type { IHint } from '@/types'
 import type { IFirebasePlayer } from 'shared/api.types'
 

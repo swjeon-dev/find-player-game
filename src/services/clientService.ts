@@ -2,7 +2,6 @@
 import { firebaseApiInstance } from '../api/firebaseClient'
 import { FIREBASE_API_ENDPOINT } from '../constant'
 import { getFirebaseURLPath } from '../utils/path'
-import { DEFAULT_API_PARAMS } from 'shared/params'
 import type { IFirebaseTeamDetail } from '../types'
 import type { FirebaseReturnPath } from '../utils/path'
 import type { IFirebasePlayer } from 'shared/api.types'
@@ -30,7 +29,7 @@ export const fetchTeam = async (
 
 // 리그 내 모든 팀 id 조회
 export const fetchTeamIdsInLeague = async (
-  leagueId: number = DEFAULT_API_PARAMS.league,
+  leagueId: number,
 ): Promise<number[]> => {
   const url = FIREBASE_API_ENDPOINT.LEAGUE_TEAM_IDS(leagueId)
 

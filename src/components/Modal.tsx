@@ -2,9 +2,12 @@ import { createPortal } from 'react-dom'
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
+import { useSetRecoilState } from 'recoil'
 
 import routerPath from '@/constant/routerPath'
+
 import emblemImage from '/emblem/pl.webp'
+import { leagueInfoState } from '@/atoms/quizState'
 
 const Dialog = styled.dialog`
   width: 80%;
@@ -54,9 +57,16 @@ const Emblem = styled.img`
   height: 70px;
 `
 
+// temp
+const pl = {
+  id: 39, // pl
+  season: 2024, // 26년 기준 최신
+}
+
 export default function Modal({ closeModal }: { closeModal: () => void }) {
   const dialogRef = useRef<HTMLDialogElement>(null)
   const navigate = useNavigate()
+  const setLeagueInfo = useSetRecoilState(leagueInfoState)
 
   useEffect(() => {
     if (!dialogRef.current?.open) {
@@ -67,6 +77,7 @@ export default function Modal({ closeModal }: { closeModal: () => void }) {
 
   // TODO: +league id 전역 상태 저장
   const setLeagueRange = () => {
+    setLeagueInfo(pl)
     navigate(routerPath.SUBMISSION)
   }
 

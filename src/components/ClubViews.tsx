@@ -1,8 +1,10 @@
+import { useRecoilValue } from 'recoil'
+import { leagueInfoState } from '@/atoms/quizState'
+import { keyframes } from 'styled-components'
 import styled, { css } from 'styled-components'
+
 import Club from './Club'
 import useFetchingTeamsDataInLeague from '../hooks/useFetchingTeamsDataInLeague'
-import { keyframes } from 'styled-components'
-import { DEFAULT_API_PARAMS } from 'shared/params'
 
 // 왼쪽에서 오른쪽으로 빛이 지나가는 애니메이션
 const shimmer = keyframes`
@@ -63,11 +65,12 @@ const ClubContainer = styled.div<IClubContainer>`
 `
 
 const ClubViews = () => {
+  const leagueInfo = useRecoilValue(leagueInfoState)
   const {
     isPending,
     error,
     teamsInLeague: teams,
-  } = useFetchingTeamsDataInLeague(DEFAULT_API_PARAMS.league)
+  } = useFetchingTeamsDataInLeague(leagueInfo.id)
 
   if (error) {
     error && console.error(`팀 정보를 가져올 수 없습니다:`, error)

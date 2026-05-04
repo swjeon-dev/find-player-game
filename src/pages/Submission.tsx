@@ -1,19 +1,18 @@
 import { useEffect, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import styled from 'styled-components'
-import HintBox from '../components/HintBox'
-import { useNavigate } from 'react-router-dom'
-import routerPath from '../constant/routerPath'
-import type { IHint } from '../types'
-
-import useFetchingPlayersDataInLeague from '../hooks/useFetchingPlayersDataInLeague'
-import SearchForm from '@/components/SearchForm'
-import { inputState, quizState } from '@/atoms/quizState'
 import { Helmet } from 'react-helmet-async'
+import styled from 'styled-components'
+import { useNavigate } from 'react-router-dom'
 
+import SearchForm from '@/components/SearchForm'
+import { inputState, leagueInfoState, quizState } from '@/atoms/quizState'
 import useQuizGenerator from '@/hooks/useQuizGenerator'
-import { DEFAULT_API_PARAMS } from 'shared/params'
 import ClubViews from '@/components/ClubViews'
+import HintBox from '../components/HintBox'
+import useFetchingPlayersDataInLeague from '../hooks/useFetchingPlayersDataInLeague'
+import routerPath from '../constant/routerPath'
+
+import type { IHint } from '../types'
 
 const Container = styled.div`
   position: relative;
@@ -105,11 +104,13 @@ const Submission = () => {
   const navigate = useNavigate()
   const quiz = useRecoilValue(quizState)
   const setValue = useSetRecoilState(inputState)
+  const leagueInfo = useRecoilValue(leagueInfoState)
+  // squad: 선수 자동 완성 목록을 필터링할 전체 선수 목록
   const {
     isPending,
     error,
     playersInLeague: squad,
-  } = useFetchingPlayersDataInLeague(DEFAULT_API_PARAMS.league, {
+  } = useFetchingPlayersDataInLeague(leagueInfo.id, {
     enabled: quiz !== null,
   })
 
@@ -123,29 +124,13 @@ const Submission = () => {
     }
   }, [quiz])
 
-  if (quiz === null || isPending) {
-    return (
-      <Container>
-        <LoadingWrapper>
-          <span style={{ fontSize: '2rem', fontWeight: 'bold' }}>
-            Loading...
-          </span>
-        </LoadingWrapper>
-      </Container>
-    )
-  }
+  if (quiz === null || isPending)
+    return <SubmissionLoader message='Loading...' />
 
-  if (error) {
+  if (error)
     return (
-      <Container>
-        <LoadingWrapper>
-          <span>
-            데이터를 불러오는 데 실패했습니다. 잠시 후 다시 시도해주세요.
-          </span>
-        </LoadingWrapper>
-      </Container>
+      <SubmissionLoader message='데이터를 불러오는 데 실패했습니다. 잠시 후 다시 시도해주세요.' />
     )
-  }
 
   const resetQuiz = () => {
     setIsCorrect(false)
@@ -195,5 +180,15 @@ function ChangeButton({ resetQuiz }: { resetQuiz: () => void }) {
     <AlertButton onClick={handleClick}>
       <span>문제 변경</span>
     </AlertButton>
+  )
+}
+
+function SubmissionLoader({ message }: { message: string }) {
+  return (
+    <Container>
+      <LoadingWrapper>
+        <span>{message}</span>
+      </LoadingWrapper>
+    </Container>
   )
 }
