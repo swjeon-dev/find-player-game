@@ -82,6 +82,8 @@ const AutoSearch = ({
               <ClubEmblem
                 src={player.teamLogo || ''}
                 alt={player.teamId.toString()}
+                width='25'
+                height='25'
               />
               <Name>{player.name}</Name>
             </PlayerBox>

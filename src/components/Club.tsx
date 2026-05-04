@@ -28,8 +28,8 @@ const Container = styled.div<{ $isActive: boolean }>`
 `
 
 const Emblem = styled.img`
-  width: 100%;
-  height: 100%;
+  width: 60px;
+  height: 60px;
   object-fit: contain;
   display: block; /* 하단 여백 제거 */
 `
@@ -64,7 +64,7 @@ const Club = ({ logo, name, id }: IFirebaseTeamDetail) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <Emblem src={logo} alt={name} ref={parentRef} />
+      <Emblem src={logo} alt={name} ref={parentRef} width='60' height='60' />
       {activeModal && onLazyModal && isHover && (
         <ClubSquadModal id={id} parentRef={parentRef} offModal={offModal} />
       )}

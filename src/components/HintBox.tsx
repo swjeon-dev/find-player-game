@@ -1,6 +1,6 @@
-import type { IHint } from '@/types'
-import { Position } from 'shared/api.types'
 import styled from 'styled-components'
+import { Position } from 'shared/api.types'
+import type { IHint } from '@/types'
 
 const HintList = styled.ul`
   margin-bottom: 40px;
@@ -54,7 +54,8 @@ const Label = styled.label`
 `
 
 const ClubEmblem = styled.img`
-  width: 50%;
+  width: 25px;
+  height: 25px;
 `
 
 interface IHintBoxProps {
@@ -90,7 +91,12 @@ const HintBox = ({ hintArr }: IHintBoxProps) => {
                     label: '클럽 이름',
                     value: qTeamId === aTeamId,
                     children: (
-                      <ClubEmblem src={a.teamLogo} alt={a.teamId.toString()} />
+                      <ClubEmblem
+                        src={a.teamLogo}
+                        alt={a.teamId.toString()}
+                        width='25'
+                        height='25'
+                      />
                     ),
                   },
                   {

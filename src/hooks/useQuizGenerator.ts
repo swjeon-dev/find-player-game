@@ -1,13 +1,14 @@
 import useFetchingPlayersDataInLeague from './useFetchingPlayersDataInLeague'
-import { useRecoilState } from 'recoil'
-import { quizState } from '@/atoms/quizState'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { leagueInfoState, quizState } from '@/atoms/quizState'
 import { useCallback } from 'react'
-import { DEFAULT_API_PARAMS } from 'shared/params'
+// import { DEFAULT_API_PARAMS } from 'shared/params'
 
 const useQuizGenerator = () => {
+  const leagueInfo = useRecoilValue(leagueInfoState)
   const [prevQuiz, setQuiz] = useRecoilState(quizState)
   const { playersInLeague: squads } = useFetchingPlayersDataInLeague(
-    DEFAULT_API_PARAMS.league,
+    leagueInfo.id,
   )
 
   const generateRandomPlayer = useCallback(() => {

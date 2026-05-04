@@ -152,6 +152,8 @@ const Submission = () => {
             src={quiz?.photo}
             alt={`${quiz?.name}`}
             $isCorrect={isCorrect}
+            width='160'
+            height='180'
           />
           <SearchForm
             squad={squad}
