@@ -1,31 +1,21 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { fetchPlayersDataInLeague } from '@/services/clientService'
-import { REACT_QUERY_OPTIONS } from '@/api'
 import type { IFirebasePlayer } from 'shared/api.types'
 
-const useFetchingPlayersDataInLeague = (
-  leagueId: number,
-  options?: {
-    initialData?: IFirebasePlayer[]
-    enabled?: boolean
-  },
-) => {
-  const queryKeys = [leagueId, 'league', 'players'] as const
-
+const useFetchingPlayersDataInLeague = ({ leagueId }: { leagueId: number }) => {
   const {
     isPending,
+    isFetching,
     error,
     data: playersInLeague,
   } = useQuery<IFirebasePlayer[], Error>({
-    queryKey: queryKeys,
+    queryKey: ['players', 'league', leagueId],
     queryFn: () => fetchPlayersDataInLeague(leagueId),
-    initialData: options?.initialData,
-    enabled: options?.enabled,
-    ...REACT_QUERY_OPTIONS,
+    enabled: leagueId !== 0,
   })
 
-  return { isPending, error, playersInLeague }
+  return { isPending, isFetching, error, playersInLeague }
 }
 
 export default useFetchingPlayersDataInLeague
