@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Position } from 'shared/api.types'
+import { Position } from '@/api/api.types'
 import type { IHint } from '@/types'
 
 const HintList = styled.ul`

@@ -6,7 +6,7 @@ import useDebouncedValue from '@/hooks/useDebouncedValue'
 import { inputState } from '@/state'
 import AutoSearch from './AutoSearch'
 import type { IHint } from '@/types'
-import type { IFirebasePlayer } from 'shared/api.types'
+import type { IFirebasePlayer } from '@/api/api.types'
 
 interface IForm {
   quiz: IFirebasePlayer

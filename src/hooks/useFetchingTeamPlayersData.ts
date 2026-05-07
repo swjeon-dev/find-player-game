@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { fetchPlayer, fetchTeamPlayerIds } from '../services/clientService'
-import type { IFirebasePlayer } from 'shared/api.types'
+import type { IFirebasePlayer } from '@/api/api.types'
 
 // 48 웨햄, 50 맨시티 선수 목록 조회 실패 확인
 const useFetchingTeamPlayersData = (teamId: number) => {

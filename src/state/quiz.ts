@@ -2,7 +2,7 @@
 // import { generateQuiz } from '@/utils/generateQuiz'
 import { atom } from 'recoil'
 
-import type { IFirebasePlayer } from 'shared/api.types'
+import type { IFirebasePlayer } from '@/api/api.types'
 
 type Quiz = IFirebasePlayer
 

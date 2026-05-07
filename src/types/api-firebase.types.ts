@@ -1,4 +1,4 @@
-import type { IFirebasePlayer } from 'shared/api.types'
+import type { IFirebasePlayer } from '@/api/api.types'
 
 export interface IFirebaseTeamDetail {
   id: number

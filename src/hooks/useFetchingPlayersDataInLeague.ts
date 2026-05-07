@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { fetchPlayersDataInLeague } from '@/services/clientService'
-import type { IFirebasePlayer } from 'shared/api.types'
+import type { IFirebasePlayer } from '@/api/api.types'
 
 const useFetchingPlayersDataInLeague = ({ leagueId }: { leagueId: number }) => {
   const {

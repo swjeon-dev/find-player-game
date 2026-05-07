@@ -1,6 +1,6 @@
 import { footballApiInstance } from '../api/externalClient'
 import { FOOTBAL_API_ENDPOINT } from '../constant/footballRoutes'
-import { fetchErrorLogger } from '../shared/api'
+import { fetchErrorLogger } from '../api/api'
 import type {
   IGetLeagueTable,
   IGetTeamSquads,

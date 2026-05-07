@@ -4,7 +4,7 @@ import { FIREBASE_API_ENDPOINT } from '../constant'
 import { getFirebaseURLPath } from '../utils/path'
 import type { IFirebaseTeamDetail } from '../types'
 import type { FirebaseReturnPath } from '../utils/path'
-import type { IFirebasePlayer } from 'shared/api.types'
+import type { IFirebasePlayer } from '@/api/api.types'
 
 // tanstack query와 함께 사용할 때, 데이터를 가져오는 fetch 함수에서 try-catch를 사용하면
 // tanstack query의 error 상태가 동작하지 않을 수 있습니다

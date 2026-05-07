@@ -1,14 +1,14 @@
 import { sleep } from '../utils/timer'
 import type { ITeam1 } from '../types/api-external.types'
-import { DEFAULT_API_PARAMS } from '../shared/params'
 import {
   fetchLeagueTableData,
   fetchSquadDataWithRetry,
 } from './externalService'
-import { fetchErrorLogger } from '../shared/api'
-import type { IFirebasePlayer } from '../shared/api.types'
 import { adminDb } from '../firebase/config'
 import { ServerValue } from 'firebase-admin/database'
+import { DEFAULT_API_PARAMS } from '../constant/params'
+import type { IFirebasePlayer } from '../api/api.types'
+import { fetchErrorLogger } from '../api/api'
 
 type IFirebaseObject = Record<string, any>
 

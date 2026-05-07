@@ -1,4 +1,4 @@
-import type { IPlayer } from '../shared/api.types'
+import type { IPlayer } from '../api/api.types'
 
 // request: teams in league
 export interface IGetLeagueTable {

@@ -2,7 +2,7 @@ import useFetchingPlayersDataInLeague from './useFetchingPlayersDataInLeague'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { leagueInfoState, quizState } from '@/state'
 import { useCallback } from 'react'
-import type { IFirebasePlayer } from 'shared/api.types'
+import type { IFirebasePlayer } from '@/api/api.types'
 
 const useQuizGenerator = (
   players: IFirebasePlayer[],
