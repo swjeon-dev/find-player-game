@@ -2,15 +2,15 @@ import { persistQueryClient } from '@tanstack/react-query-persist-client'
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
 import { queryClient } from './queryClient'
 
-const persister = createAsyncStoragePersister({
+const localStoragePersister = createAsyncStoragePersister({
   storage: window.localStorage,
 })
 
 export const setupQueryPersist = () => {
   persistQueryClient({
     queryClient,
-    persister,
-    maxAge: 1000 * 60 * 5,
+    persister: localStoragePersister,
+    maxAge: 1000 * 60 * 60 * 24,
 
     buster: 'v1', // 구조 변경 시 초기화
 
