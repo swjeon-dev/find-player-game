@@ -1,8 +1,10 @@
 import { Profiler } from 'react'
 
 export default function ProfileComp({
+  id,
   children,
 }: {
+  id: string
   children: React.ReactNode
 }) {
   function onRender(
@@ -20,7 +22,7 @@ export default function ProfileComp({
   }
 
   return (
-    <Profiler id='MyComponent' onRender={onRender}>
+    <Profiler id={id} onRender={onRender}>
       {children}
     </Profiler>
   )
