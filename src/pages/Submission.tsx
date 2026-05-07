@@ -9,8 +9,10 @@ import useQuizGenerator from '@/hooks/useQuizGenerator'
 import ClubViews from '@/components/ClubViews'
 import HintBox from '../components/HintBox'
 import useFetchingPlayersDataInLeague from '../hooks/useFetchingPlayersDataInLeague'
+import useFetchingPlayersIdInLeague from '@/hooks/useFetchingPlayersIdInLeague'
 
 import type { IHint } from '../types'
+import type { IFirebasePlayer } from '@/api/api.types'
 
 // TODO: quiz 변수를 해당 페이지말고 다른 곳에서 쓰는지 확인 후,
 // local or 전역 상태 변경 및 유지 확인
@@ -105,13 +107,24 @@ const Submission = () => {
 
   // squad: 선수 자동 완성 목록을 필터링할 전체 선수 목록
   const {
-    isPending,
-    isFetching,
-    error,
-    playersInLeague: squad,
-  } = useFetchingPlayersDataInLeague({ leagueId: leagueInfo.id })
+    isPending: isIdsPending,
+    error: idsError,
+    playersId,
+  } = useFetchingPlayersIdInLeague({
+    leagueId: leagueInfo.id,
+  })
 
-  console.log('squad wrap', isPending, isFetching)
+  const {
+    isPending: isPlayersPending,
+    error: playersError,
+    playersInLeague: squad,
+  } = useFetchingPlayersDataInLeague({
+    leagueId: leagueInfo.id,
+    playerIds: playersId,
+  })
+
+  const isPending = isIdsPending || isPlayersPending
+  const error = idsError || playersError
 
   if (error)
     return (
@@ -128,7 +141,7 @@ const Submission = () => {
       </Helmet>
       <ClubViews />
       <Container>
-        <ContentsComponent isPending={isPending} squad={squad} />
+        <ContentsComponent isPending={isPending} squad={squad ?? []} />
       </Container>
     </>
   )
@@ -136,7 +149,13 @@ const Submission = () => {
 
 export default Submission
 
-function ContentsComponent({ isPending, squad }) {
+function ContentsComponent({
+  isPending,
+  squad,
+}: {
+  isPending: boolean
+  squad: IFirebasePlayer[]
+}) {
   const [hintArr, setHintArr] = useState<IHint[]>([])
   const [isCorrect, setIsCorrect] = useState<boolean>(false)
   const setValue = useSetRecoilState(inputState)

@@ -9,7 +9,10 @@ import routerPath from '@/constant/routerPath'
 import emblemImage from '/emblem/pl.webp'
 import { leagueInfoState } from '@/state'
 import { queryClient } from '@/lib/queryClient'
-import { fetchPlayersDataInLeague } from '@/services/clientService'
+import {
+  fetchPlayersDataInLeagueByIds,
+  fetchPlayerIdsInLeague,
+} from '@/services/clientService'
 
 const Dialog = styled.dialog`
   width: 80%;
@@ -108,13 +111,37 @@ export default function LeagueSelectModal({
   const prefetchPlayers = useMemo(
     () =>
       debounce((leagueId: leagueListProps['id']) => {
-        const queryKey = ['players', 'league', leagueId]
+        const dataKey = ['players', 'league', leagueId] as const
+        const idsKey = [
+          'persist',
+          'players',
+          'ids',
+          'league',
+          leagueId,
+        ] as const
 
-        if (queryClient.getQueryData(queryKey)) return
+        // ids
+        const playersId: number[] | undefined = queryClient.getQueryData(idsKey)
 
-        queryClient.prefetchQuery({
-          queryKey,
-          queryFn: () => fetchPlayersDataInLeague(leagueId),
+        if (playersId?.length && playersId.length > 0) {
+          return queryClient.prefetchQuery({
+            queryKey: dataKey,
+            queryFn: async () => {
+              const players = await fetchPlayersDataInLeagueByIds(playersId)
+              return players
+            },
+          })
+        }
+
+        return queryClient.prefetchQuery({
+          queryKey: dataKey,
+          queryFn: async () => {
+            const playerIds = await fetchPlayerIdsInLeague(leagueId)
+            queryClient.setQueryData(idsKey, playerIds)
+
+            const players = await fetchPlayersDataInLeagueByIds(playerIds)
+            return players
+          },
         })
       }, 200),
     [],

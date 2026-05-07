@@ -63,11 +63,19 @@ export const fetchPlayerIdsInLeague = async (
   return await fetchFirebaseData<number[]>(getFirebaseURLPath(url))
 }
 
-// 리그 내 모든 선수 정보 조회
-export const fetchPlayersDataInLeague = async (
+// 리그 내 선수 id 조회
+export const fetchPlayersIdInLeague = async (
   leagueId: number,
-): Promise<IFirebasePlayer[]> => {
+): Promise<number[]> => {
   const playerIds = await fetchPlayerIdsInLeague(leagueId)
+
+  return playerIds
+}
+
+// 리그 내 선수 id를 통해 선수 정보 조회
+export const fetchPlayersDataInLeagueByIds = async (
+  playerIds: number[],
+): Promise<IFirebasePlayer[]> => {
   const requestPromise = playerIds.map(id => fetchPlayer(id))
   const players = await Promise.all(requestPromise).then(result =>
     result.flat(),
