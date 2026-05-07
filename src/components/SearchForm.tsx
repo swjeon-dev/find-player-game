@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil'
 import styled from 'styled-components'
 
 import useDebouncedValue from '@/hooks/useDebouncedValue'
-import { inputState } from '@/atoms/quizState'
+import { inputState } from '@/state'
 import AutoSearch from './AutoSearch'
 import type { IHint } from '@/types'
 import type { IFirebasePlayer } from 'shared/api.types'

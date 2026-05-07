@@ -1,19 +1,19 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { Helmet } from 'react-helmet-async'
 import styled from 'styled-components'
-import { useNavigate } from 'react-router-dom'
 
 import SearchForm from '@/components/SearchForm'
-import { inputState, leagueInfoState, quizState } from '@/atoms/quizState'
+import { quizState, inputState, leagueInfoState } from '@/state'
 import useQuizGenerator from '@/hooks/useQuizGenerator'
 import ClubViews from '@/components/ClubViews'
 import HintBox from '../components/HintBox'
 import useFetchingPlayersDataInLeague from '../hooks/useFetchingPlayersDataInLeague'
-import routerPath from '../constant/routerPath'
 
 import type { IHint } from '../types'
 
+// TODO: quiz 변수를 해당 페이지말고 다른 곳에서 쓰는지 확인 후,
+// local or 전역 상태 변경 및 유지 확인
 const Container = styled.div`
   position: relative;
   width: 500px;
@@ -91,52 +91,35 @@ const LoadingWrapper = styled.div`
 
   background-color: skyblue;
   border-radius: 15px;
+  padding: 10px 20px;
   & span {
     font-size: 2rem;
     font-weight: bold;
     line-height: 3rem;
     color: white;
-    word-break: keep-all;
   }
 `
 
 const Submission = () => {
-  const navigate = useNavigate()
-  const quiz = useRecoilValue(quizState)
-  const setValue = useSetRecoilState(inputState)
   const leagueInfo = useRecoilValue(leagueInfoState)
+
   // squad: 선수 자동 완성 목록을 필터링할 전체 선수 목록
   const {
     isPending,
+    isFetching,
     error,
     playersInLeague: squad,
-  } = useFetchingPlayersDataInLeague(leagueInfo.id, {
-    enabled: quiz !== null,
-  })
+  } = useFetchingPlayersDataInLeague({ leagueId: leagueInfo.id })
 
-  const [hintArr, setHintArr] = useState<IHint[]>([])
-  const [isCorrect, setIsCorrect] = useState<boolean>(false)
-
-  useEffect(() => {
-    if (quiz === null) {
-      navigate(routerPath.HOME, { replace: true })
-      alert('문제가 준비되지 않았습니다.')
-    }
-  }, [quiz])
-
-  if (quiz === null || isPending)
-    return <SubmissionLoader message='Loading...' />
+  console.log('squad wrap', isPending, isFetching)
 
   if (error)
     return (
-      <SubmissionLoader message='데이터를 불러오는 데 실패했습니다. 잠시 후 다시 시도해주세요.' />
+      <SubmissionLoader
+        message='선수 데이터를 불러오는 데 실패했습니다.
+      잠시 후 다시 시도해주세요.'
+      />
     )
-
-  const resetQuiz = () => {
-    setIsCorrect(false)
-    setHintArr([])
-    setValue('')
-  }
 
   return (
     <>
@@ -145,7 +128,40 @@ const Submission = () => {
       </Helmet>
       <ClubViews />
       <Container>
-        <FormContainer>
+        <ContentsComponent isPending={isPending} squad={squad} />
+      </Container>
+    </>
+  )
+}
+
+export default Submission
+
+function ContentsComponent({ isPending, squad }) {
+  const [hintArr, setHintArr] = useState<IHint[]>([])
+  const [isCorrect, setIsCorrect] = useState<boolean>(false)
+  const setValue = useSetRecoilState(inputState)
+  const quiz = useRecoilValue(quizState)
+  const { generateQuiz } = useQuizGenerator(squad)
+
+  const resetQuiz = () => {
+    setIsCorrect(false)
+    setHintArr([])
+    setValue('')
+  }
+
+  useEffect(() => {
+    if (squad?.length === 0) return
+    generateQuiz()
+  }, [squad])
+
+  return (
+    <>
+      <FormContainer>
+        {isPending ? (
+          <div style={{ width: 160, height: 180, background: 'gray' }}>
+            skeleton ui
+          </div>
+        ) : (
           <Photo
             key={quiz?.photo}
             draggable={false}
@@ -155,27 +171,31 @@ const Submission = () => {
             width='160'
             height='180'
           />
-          <SearchForm
-            squad={squad}
-            quiz={quiz}
-            disabled={isCorrect}
-            setIsCorrect={setIsCorrect}
-            setHintArr={setHintArr}
-          />
-        </FormContainer>
-        {hintArr && hintArr?.length > 0 && <HintBox hintArr={hintArr} />}
-        <ChangeButton resetQuiz={resetQuiz} />
-      </Container>
+        )}
+
+        <SearchForm
+          squad={squad}
+          quiz={quiz}
+          disabled={isCorrect}
+          setIsCorrect={setIsCorrect}
+          setHintArr={setHintArr}
+        />
+      </FormContainer>
+      {hintArr && hintArr?.length > 0 && <HintBox hintArr={hintArr} />}
+      <ChangeButton resetQuiz={resetQuiz} generateQuiz={generateQuiz} />
     </>
   )
 }
 
-export default Submission
-
-function ChangeButton({ resetQuiz }: { resetQuiz: () => void }) {
-  const { generateRandomPlayer } = useQuizGenerator()
+function ChangeButton({
+  resetQuiz,
+  generateQuiz,
+}: {
+  resetQuiz: () => void
+  generateQuiz: () => void
+}) {
   const handleClick = () => {
-    generateRandomPlayer()
+    generateQuiz()
     resetQuiz()
   }
   return (
@@ -187,10 +207,8 @@ function ChangeButton({ resetQuiz }: { resetQuiz: () => void }) {
 
 function SubmissionLoader({ message }: { message: string }) {
   return (
-    <Container>
-      <LoadingWrapper>
-        <span>{message}</span>
-      </LoadingWrapper>
-    </Container>
+    <LoadingWrapper>
+      <span>{message}</span>
+    </LoadingWrapper>
   )
 }
