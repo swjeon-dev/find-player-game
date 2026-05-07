@@ -3,6 +3,7 @@ import Submission from '../pages/Submission'
 import RootLayout from '../components/layout/RootLayout'
 import routerPath from '../constant/routerPath'
 import { Cover } from '@/pages/Cover'
+import ProtectedRoute from '@/components/ProtectedRoute'
 
 const routes = [
   {
@@ -15,7 +16,13 @@ const routes = [
       },
       {
         path: routerPath.SUBMISSION,
-        element: <Submission />,
+        element: <ProtectedRoute />,
+        children: [
+          {
+            index: true,
+            element: <Submission />,
+          },
+        ],
       },
     ],
   },
