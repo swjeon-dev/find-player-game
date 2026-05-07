@@ -7,6 +7,7 @@ const useFetchingTeamsDataInLeague = (leagueId: number) => {
     isPending,
     error,
     data: teamsInLeague,
+    refetch,
   } = useQuery<IFirebaseTeamDetail[], Error>({
     queryKey: ['teams', 'league', leagueId],
     queryFn: async () => {
@@ -19,7 +20,7 @@ const useFetchingTeamsDataInLeague = (leagueId: number) => {
     },
   })
 
-  return { isPending, error, teamsInLeague }
+  return { isPending, error, teamsInLeague, refetch }
 }
 
 export default useFetchingTeamsDataInLeague
