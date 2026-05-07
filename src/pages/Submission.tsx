@@ -82,18 +82,32 @@ const AlertButton = styled.button`
   overflow: hidden;
   cursor: pointer;
 `
-const LoadingWrapper = styled.div`
-  width: 100%;
-  height: 280px;
+const RetryButton = styled.button`
+  margin-top: 14px;
+  font-size: 16px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #1a1a1a;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 14px;
+  cursor: pointer;
+`
+const LoadingWrapper = styled(Container)`
   text-align: center;
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 20px;
 
   background-color: skyblue;
   border-radius: 15px;
   padding: 10px 20px;
+
+  & div {
+    margin-bottom: 15px;
+  }
   & span {
     font-size: 2rem;
     font-weight: bold;
@@ -110,6 +124,7 @@ const Submission = () => {
     isPending: isIdsPending,
     error: idsError,
     playersId,
+    refetch: refetchPlayersId,
   } = useFetchingPlayersIdInLeague({
     leagueId: leagueInfo.id,
   })
@@ -126,23 +141,23 @@ const Submission = () => {
   const isPending = isIdsPending || isPlayersPending
   const error = idsError || playersError
 
-  if (error)
-    return (
-      <SubmissionLoader
-        message='선수 데이터를 불러오는 데 실패했습니다.
-      잠시 후 다시 시도해주세요.'
-      />
-    )
-
   return (
     <>
       <Helmet>
         <title>Quiz | Find Football Player</title>
       </Helmet>
       <ClubViews />
-      <Container>
-        <ContentsComponent isPending={isPending} squad={squad ?? []} />
-      </Container>
+      {error ? (
+        <SubmissionLoader
+          message='선수 데이터를 불러오는 데 실패했습니다.
+      잠시 후 다시 시도해주세요.'
+          onRetry={refetchPlayersId}
+        />
+      ) : (
+        <Container>
+          <ContentsComponent isPending={isPending} squad={squad ?? []} />
+        </Container>
+      )}
     </>
   )
 }
@@ -224,10 +239,21 @@ function ChangeButton({
   )
 }
 
-function SubmissionLoader({ message }: { message: string }) {
+function SubmissionLoader({
+  message,
+  onRetry,
+}: {
+  message: string
+  onRetry?: () => void
+}) {
   return (
     <LoadingWrapper>
-      <span>{message}</span>
+      <div>
+        <span>{message}</span>
+        {onRetry ? (
+          <RetryButton onClick={onRetry}>다시 시도</RetryButton>
+        ) : null}
+      </div>
     </LoadingWrapper>
   )
 }
