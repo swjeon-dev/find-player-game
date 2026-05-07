@@ -1,7 +1,6 @@
-import useFetchingPlayersDataInLeague from './useFetchingPlayersDataInLeague'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { leagueInfoState, quizState } from '@/state'
-import { useCallback } from 'react'
+import { useSetRecoilState } from 'recoil'
+import { quizState } from '@/state'
+
 import type { IFirebasePlayer } from '@/api/api.types'
 
 const useQuizGenerator = (
@@ -31,28 +30,3 @@ const useQuizGenerator = (
 }
 
 export default useQuizGenerator
-// const useQuizGenerator = () => {
-//   const leagueInfo = useRecoilValue(leagueInfoState)
-//   const setQuiz = useSetRecoilState(quizState)
-//   const { playersInLeague: squads } = useFetchingPlayersDataInLeague({
-//     leagueId: leagueInfo.id,
-//   })
-
-//   // TODO: filter 구조 개선 (성능 확인)
-//   const generateRandomPlayer = useCallback(() => {
-//     setQuiz(prev => {
-//       if (!squads || squads.length === 0) return prev
-
-//       const availablePlayers = squads.filter(player => player.id !== prev?.id)
-//       const players = availablePlayers.length > 0 ? availablePlayers : squads
-
-//       const randomIdx = Math.floor(Math.random() * players.length)
-//       console.log('players[randomIdx]', players[randomIdx])
-//       return players[randomIdx]
-//     })
-//   }, [squads, setQuiz])
-
-//   return { generateRandomPlayer }
-// }
-
-// export default useQuizGenerator
