@@ -1,30 +1,45 @@
 import { useRecoilValue } from 'recoil'
-import { leagueInfoState } from '@/atoms/quizState'
-import { keyframes } from 'styled-components'
 import styled, { css } from 'styled-components'
 
+import { leagueInfoState } from '@/state'
+import { SkeletonBase } from '@/utils/skeletonUI'
 import Club from './Club'
 import useFetchingTeamsDataInLeague from '../hooks/useFetchingTeamsDataInLeague'
 
-// 왼쪽에서 오른쪽으로 빛이 지나가는 애니메이션
-const shimmer = keyframes`
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+import ProfileComp from './Profiler'
+
+const ErrorBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  justify-content: center;
+  align-items: center;
+
+  height: 140px;
+  padding: 10px;
+  border-radius: 12px;
+
+  background-color: #ffdddd;
+  color: #b00020;
+
+  font-size: 0.85rem;
 `
 
-const SkeletonBase = styled.div`
-  background: #eee;
-  /* 그라데이션을 넓게 설정하고 배경 크기를 200%로 설정 */
-  background-image: linear-gradient(90deg, #eee 0%, #c5c4c4c9 50%, #eee 100%);
-  background-size: 200% 100%;
-  animation: ${shimmer} 1.5s infinite linear;
+const RetryButton = styled.button`
+  padding: 8px 12px;
   border-radius: 8px;
+  border: none;
+  cursor: pointer;
+
+  background: #b00020;
+  color: white;
 `
 
 const ClubSkeleton = styled(SkeletonBase)`
   min-width: 70px;
   aspect-ratio: 1/1;
-  border-radius: 25%; // 원형 로고인 경우
+  border-radius: 25%;
   margin: auto;
 `
 
@@ -70,27 +85,32 @@ const ClubViews = () => {
     isPending,
     error,
     teamsInLeague: teams,
+    refetch,
   } = useFetchingTeamsDataInLeague(leagueInfo.id)
 
+  // console.log('leagueInfo', leagueInfo)
+  // 에러 UI
   if (error) {
-    error && console.error(`팀 정보를 가져올 수 없습니다:`, error)
     return (
-      <ClubContainer $isLoading style={{ display: 'block' }}>
-        <span>현재 팀을 찾을 수 없습니다</span>
-      </ClubContainer>
+      <ErrorBox>
+        <span>팀 데이터를 불러오지 못했습니다</span>
+        <RetryButton onClick={() => refetch()}>다시 시도</RetryButton>
+      </ErrorBox>
     )
   }
 
-  const showSkeleton = isPending || !teams || teams.length === 0
-
   return (
-    <ClubContainer $isLoading={isPending}>
-      {showSkeleton
-        ? Array.from({ length: 18 }).map((_, idx) => {
-            return <ClubSkeleton key={idx} />
-          })
-        : teams.map(club => <Club key={club.id} {...club} />)}
-    </ClubContainer>
+    <>
+      {/* <ProfileComp id='ClubViews'> */}
+      <ClubContainer $isLoading={isPending}>
+        {isPending
+          ? Array.from({ length: 12 }).map((_, idx) => {
+              return <ClubSkeleton key={idx} />
+            })
+          : teams.map(club => <Club key={club.id} {...club} />)}
+      </ClubContainer>
+      {/* </ProfileComp> */}
+    </>
   )
 }
 
