@@ -16,6 +16,14 @@ interface IForm {
   setHintArr: React.Dispatch<React.SetStateAction<IHint[]>>
 }
 
+const Form = styled.form`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+`
 const Input = styled.input`
   width: 70%;
   height: 35px;
@@ -114,8 +122,9 @@ function SearchForm({
   }, [debouncedValue])
 
   return (
-    <form onSubmit={onSubmit}>
+    <Form onSubmit={onSubmit}>
       <Input
+        name='search'
         disabled={disabled}
         onKeyDown={onKeyDown}
         value={value}
@@ -131,7 +140,7 @@ function SearchForm({
           focusedIndex={focusedIndex}
         />
       )}
-    </form>
+    </Form>
   )
 }
 
