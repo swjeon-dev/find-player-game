@@ -19,7 +19,11 @@ export const setupQueryPersist = () => {
         const key = query.queryKey
 
         // 특정 query만 persist
-        return Array.isArray(key) && key[0] === 'persist'
+        return (
+          query.state.status === 'success' &&
+          Array.isArray(key) &&
+          key[0] === 'persist'
+        )
       },
     },
   })
