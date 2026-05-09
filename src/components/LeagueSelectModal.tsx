@@ -12,14 +12,15 @@ import { queryClient } from '@/lib/queryClient'
 import {
   fetchPlayersDataInLeagueByIds,
   fetchPlayerIdsInLeague,
+  fetchTeamIdsInLeague,
 } from '@/services/clientService'
+import { queryKeysMain } from '@/lib/queryKeys'
 
 const Dialog = styled.dialog`
   width: 80%;
   max-width: 500px;
   height: 280px;
   background-color: #6b7280;
-  border-radius: 15px;
   padding: 0;
   border: none;
   border-radius: 12px;
@@ -108,41 +109,47 @@ export default function LeagueSelectModal({
     navigate(routerPath.SUBMISSION)
   }
 
-  const prefetchPlayers = useMemo(
+  const prefetchTeams = (leagueId: leagueListProps['id']) => {
+    // 리그 팀 id 조회
+    const teamsIds: number[] | undefined = queryClient.getQueryData(
+      queryKeysMain.teams.idsByLeaguePersisted(leagueId),
+    )
+
+    // 프리페치: 리그 팀 id 조회
+    if (!teamsIds?.length) {
+      return queryClient.prefetchQuery({
+        queryKey: queryKeysMain.teams.idsByLeaguePersisted(leagueId),
+        queryFn: () => fetchTeamIdsInLeague(leagueId),
+      })
+    }
+  }
+
+  const prefetchPlayers = (leagueId: leagueListProps['id']) => {
+    // league id 기준 선수 id 조회
+    const playersId: number[] | undefined = queryClient.getQueryData(
+      queryKeysMain.players.idsByLeaguePersisted(leagueId),
+    )
+
+    if (!playersId?.length) {
+      // 프리페치: league id 기준 선수 id 조회
+      return queryClient.prefetchQuery({
+        queryKey: queryKeysMain.players.idsByLeaguePersisted(leagueId),
+        queryFn: () => fetchPlayerIdsInLeague(leagueId),
+      })
+    }
+
+    // 프리페치: 선수 id 기준 선수 데이터 조회 > 리그 선수 데이터 조회
+    return queryClient.prefetchQuery({
+      queryKey: queryKeysMain.players.byLeague(leagueId),
+      queryFn: () => fetchPlayersDataInLeagueByIds(playersId),
+    })
+  }
+
+  const prefetchingLeagueData = useMemo(
     () =>
       debounce((leagueId: leagueListProps['id']) => {
-        const dataKey = ['players', 'league', leagueId] as const
-        const idsKey = [
-          'persist',
-          'players',
-          'ids',
-          'league',
-          leagueId,
-        ] as const
-
-        // ids
-        const playersId: number[] | undefined = queryClient.getQueryData(idsKey)
-
-        if (playersId?.length && playersId.length > 0) {
-          return queryClient.prefetchQuery({
-            queryKey: dataKey,
-            queryFn: async () => {
-              const players = await fetchPlayersDataInLeagueByIds(playersId)
-              return players
-            },
-          })
-        }
-
-        return queryClient.prefetchQuery({
-          queryKey: dataKey,
-          queryFn: async () => {
-            const playerIds = await fetchPlayerIdsInLeague(leagueId)
-            queryClient.setQueryData(idsKey, playerIds)
-
-            const players = await fetchPlayersDataInLeagueByIds(playerIds)
-            return players
-          },
-        })
+        prefetchTeams(leagueId)
+        prefetchPlayers(leagueId)
       }, 200),
     [],
   )
@@ -171,7 +178,7 @@ export default function LeagueSelectModal({
             <Box
               key={`league-${league.name}`}
               onClick={() => setLeagueRange(league)}
-              onMouseEnter={() => prefetchPlayers(league.id)}
+              onMouseEnter={() => prefetchingLeagueData(league.id)}
               aria-label={`${league.name} 리그 선택 버튼`}
             >
               <Emblem
