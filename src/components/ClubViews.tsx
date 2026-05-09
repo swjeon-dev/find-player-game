@@ -4,9 +4,8 @@ import styled, { css } from 'styled-components'
 import { leagueInfoState } from '@/state'
 import { SkeletonBase } from '@/utils/skeletonUI'
 import Club from './Club'
-import useFetchingTeamsDataInLeague from '../hooks/useFetchingTeamsDataInLeague'
-
 import ProfileComp from './Profiler'
+import useFetchingTeamsDataInLeague from '../hooks/useFetchingTeamsDataInLeague'
 
 const ErrorBox = styled.div`
   display: flex;
@@ -79,6 +78,27 @@ const ClubContainer = styled.div<IClubContainer>`
   }
 `
 
+// TODO: update가 6번 발생. 확인
+/**
+ * 
+| 컴포넌트        | mount |   update |    총 렌더링 |
+| ----------- | ----: | -------: | -------: |
+| `ClubViews` |    1회 |       9회 |      10회 |
+| `Club`      |   12회 | 약 39~40회 | 약 51~52회 |
+
+성능에 문제는 없지만 리렌더링 횟수가 많음.
+1. club 컴포넌트 메모제이션
+2. array 컴포넌트의 index를 id로 변경
+> 횟수 변화
+ actualDuration < baseDuration
+패턴이 반복되는 것은 React가 memo 비교 후 렌더를 skip했다는 의미입니다.
+| 컴포넌트        | mount | update | 총 렌더링 |
+| ----------- | ----: | -----: | ----: |
+| `ClubViews` |    1회 |     6회 |    7회 |
+| `Club`      |   10회 |     0회 |   10회 |
+
+
+ */
 const ClubViews = () => {
   const leagueInfo = useRecoilValue(leagueInfoState)
   const { teamIdsQuery, teamDatasQuery } = useFetchingTeamsDataInLeague(
@@ -94,13 +114,13 @@ const ClubViews = () => {
       </ErrorBox>
     )
   }
-  // const isInitialLoading = teamIdsQuery.isPending
-  // const isAnyTeamLoading = teamDatasQuery.some(q => q.isPending)
+  const isInitialLoading = teamIdsQuery.isPending
+  const isAnyTeamLoading = teamDatasQuery.some(q => q.isPending)
 
   return (
-    <ProfileComp id='ClubViews'>
-      dafd
-      {/* <ClubContainer $isLoading={isInitialLoading || isAnyTeamLoading}>
+    <>
+      {/* <ProfileComp id='ClubViews'> */}
+      <ClubContainer $isLoading={isInitialLoading || isAnyTeamLoading}>
         {isInitialLoading
           ? Array.from({ length: 12 }).map((_, idx) => (
               <ClubSkeleton key={idx} />
@@ -112,8 +132,9 @@ const ClubViews = () => {
                 <ClubSkeleton key={idx} />
               ),
             )}
-      </ClubContainer> */}
-    </ProfileComp>
+      </ClubContainer>
+      {/* </ProfileComp> */}
+    </>
   )
 }
 

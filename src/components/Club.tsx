@@ -1,9 +1,11 @@
+import { memo, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
+
+import routerPath from '@/constant/routerPath'
 import ClubSquadModal from './ClubSquadModal'
-import { useMemo, useRef, useState } from 'react'
 import type { IFirebaseTeamDetail } from '../types'
 import useDebouncedValue from '../hooks/useDebouncedValue'
-import routerPath from '@/constant/routerPath'
+import ProfileComp from './Profiler'
 
 const Container = styled.div<{ $isActive: boolean }>`
   min-width: 70px;
@@ -42,9 +44,7 @@ const Club = ({ logo, name, id }: IFirebaseTeamDetail) => {
   const onLazyModal = useDebouncedValue(isHover, 300)
   const parentRef = useRef<HTMLImageElement>(null)
 
-  const activeModal = useMemo(() => {
-    return location.pathname === pathWithBasename
-  }, [location.pathname])
+  const activeModal = location.pathname === pathWithBasename
 
   const handleMouseEnter = () => {
     if (clicked) return
@@ -59,17 +59,21 @@ const Club = ({ logo, name, id }: IFirebaseTeamDetail) => {
     setClicked(true)
   }
   return (
-    <Container
-      $isActive={activeModal && isHover}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      <Emblem src={logo} alt={name} ref={parentRef} width='60' height='60' />
-      {activeModal && onLazyModal && isHover && (
-        <ClubSquadModal id={id} parentRef={parentRef} offModal={offModal} />
-      )}
-    </Container>
+    <>
+      {/* <ProfileComp id='Club'> */}
+      <Container
+        $isActive={activeModal && isHover}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <Emblem src={logo} alt={name} ref={parentRef} width='60' height='60' />
+        {activeModal && onLazyModal && isHover && (
+          <ClubSquadModal id={id} parentRef={parentRef} offModal={offModal} />
+        )}
+      </Container>
+      {/* </ProfileComp> */}
+    </>
   )
 }
 
-export default Club
+export default memo(Club)
