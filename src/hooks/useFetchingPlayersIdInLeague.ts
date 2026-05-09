@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { fetchPlayersIdInLeague } from '@/services/clientService'
+import { fetchPlayerIdsInLeague } from '@/services/clientService'
+import { queryKeysMain } from '@/lib/queryKeys'
 
 const useFetchingPlayersIdInLeague = ({ leagueId }: { leagueId: number }) => {
   const queryClient = useQueryClient()
@@ -12,8 +13,8 @@ const useFetchingPlayersIdInLeague = ({ leagueId }: { leagueId: number }) => {
     data: playersId,
     refetch,
   } = useQuery<number[], Error>({
-    queryKey: ['persist', 'players', 'ids', 'league', leagueId],
-    queryFn: () => fetchPlayersIdInLeague(leagueId),
+    queryKey: queryKeysMain.players.idsByLeaguePersisted(leagueId),
+    queryFn: () => fetchPlayerIdsInLeague(leagueId),
     enabled: !!leagueId,
   })
 
@@ -21,7 +22,7 @@ const useFetchingPlayersIdInLeague = ({ leagueId }: { leagueId: number }) => {
     if (!leagueId) return
     if (!Array.isArray(playersId) || playersId.length === 0) return
     queryClient.invalidateQueries({
-      queryKey: ['players', 'league', leagueId],
+      queryKey: queryKeysMain.players.byLeague(leagueId),
     })
   }, [leagueId, playersId, queryClient])
 
