@@ -7,7 +7,7 @@ import type { IFirebasePlayer } from '@/api/api.types'
 type Quiz = IFirebasePlayer
 
 export const quizState = atom<Quiz | null>({
-  key: 'player',
+  key: 'quizPlayer',
   default: null,
   // effects_UNSTABLE: [persistAtom],
 })
@@ -17,20 +17,4 @@ export const quizState = atom<Quiz | null>({
 // const { persistAtom } = recoilPersist({
 //   key: 'quiz',
 //   storage: sessionStorage,
-// })
-
-// queryKey: ['players', 'league', leagueInfo.id, leagueInfo.season]
-
-// export const problem = selector({
-//   key: 'quiz',
-//   get: ({ get }) => {
-//     const leagueInfo = get(leagueInfoState)
-//     const players: any[] | null = queryClient.getQueryData([
-//       'players',
-//       'league',
-//       leagueInfo.id,
-//     ])
-//     if (!players) return null
-//     return generateQuiz(players)
-//   },
 // })

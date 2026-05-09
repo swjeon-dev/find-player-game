@@ -17,7 +17,6 @@ const fetchFirebaseData = async <T>(path: FirebaseReturnPath): Promise<T> => {
 }
 
 // 팀 조회
-
 // 하나의 팀 조회
 export const fetchTeam = async (
   teamId: number,
@@ -37,7 +36,6 @@ export const fetchTeamIdsInLeague = async (
 }
 
 // 선수 조회
-
 // 선수 정보 조회
 export const fetchPlayer = async (
   playerId: number,
@@ -61,15 +59,6 @@ export const fetchPlayerIdsInLeague = async (
   const url = FIREBASE_API_ENDPOINT.LEAGUE_PLAYER_IDS(leagueId)
 
   return await fetchFirebaseData<number[]>(getFirebaseURLPath(url))
-}
-
-// 리그 내 선수 id 조회
-export const fetchPlayersIdInLeague = async (
-  leagueId: number,
-): Promise<number[]> => {
-  const playerIds = await fetchPlayerIdsInLeague(leagueId)
-
-  return playerIds
 }
 
 // 리그 내 선수 id를 통해 선수 정보 조회
