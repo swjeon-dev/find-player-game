@@ -12,10 +12,10 @@ export const useSelectPlayer = (cb: () => void) => {
   }, [])
 }
 
-export const useModalPosition = (listRef, parentRef, deps): boolean => {
+export const useModalPosition = (listRef, parentRef, triggerKey): boolean => {
   const [isToMove, setIsToMove] = useState(false)
 
-  useEffect(() => {
+  const recalcPosition = useCallback(() => {
     if (!listRef.current || !parentRef.current) return
 
     const { bottom } = parentRef.current.getBoundingClientRect()
@@ -25,7 +25,26 @@ export const useModalPosition = (listRef, parentRef, deps): boolean => {
     const isListToTransfer = screenHeight - bottom < playListHeight
 
     setIsToMove(isListToTransfer)
-  }, deps)
+  }, [listRef, parentRef])
+
+  useEffect(() => {
+    recalcPosition()
+  }, [triggerKey, recalcPosition])
+
+  useEffect(() => {
+    if (!listRef.current) return
+
+    const observer = new ResizeObserver(() => recalcPosition())
+
+    observer.observe(listRef.current)
+
+    return () => observer.disconnect()
+  }, [recalcPosition])
+
+  useEffect(() => {
+    window.addEventListener('resize', recalcPosition)
+    return () => window.removeEventListener('resize', recalcPosition)
+  }, [recalcPosition])
 
   return isToMove
 }

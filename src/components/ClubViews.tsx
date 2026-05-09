@@ -81,36 +81,39 @@ const ClubContainer = styled.div<IClubContainer>`
 
 const ClubViews = () => {
   const leagueInfo = useRecoilValue(leagueInfoState)
-  const {
-    isPending,
-    error,
-    teamsInLeague: teams,
-    refetch,
-  } = useFetchingTeamsDataInLeague(leagueInfo.id)
-
-  // console.log('leagueInfo', leagueInfo)
-  // 에러 UI
-  if (error) {
+  const { teamIdsQuery, teamDatasQuery } = useFetchingTeamsDataInLeague(
+    leagueInfo.id,
+  )
+  if (teamIdsQuery.error) {
     return (
       <ErrorBox>
         <span>팀 데이터를 불러오지 못했습니다</span>
-        <RetryButton onClick={() => refetch()}>다시 시도</RetryButton>
+        <RetryButton onClick={() => teamIdsQuery.refetch()}>
+          다시 시도
+        </RetryButton>
       </ErrorBox>
     )
   }
+  // const isInitialLoading = teamIdsQuery.isPending
+  // const isAnyTeamLoading = teamDatasQuery.some(q => q.isPending)
 
   return (
-    <>
-      {/* <ProfileComp id='ClubViews'> */}
-      <ClubContainer $isLoading={isPending}>
-        {isPending
-          ? Array.from({ length: 12 }).map((_, idx) => {
-              return <ClubSkeleton key={idx} />
-            })
-          : teams.map(club => <Club key={club.id} {...club} />)}
-      </ClubContainer>
-      {/* </ProfileComp> */}
-    </>
+    <ProfileComp id='ClubViews'>
+      dafd
+      {/* <ClubContainer $isLoading={isInitialLoading || isAnyTeamLoading}>
+        {isInitialLoading
+          ? Array.from({ length: 12 }).map((_, idx) => (
+              <ClubSkeleton key={idx} />
+            ))
+          : teamDatasQuery.map((q, idx) =>
+              q.data ? (
+                <Club key={q.data.id} {...q.data} />
+              ) : (
+                <ClubSkeleton key={idx} />
+              ),
+            )}
+      </ClubContainer> */}
+    </ProfileComp>
   )
 }
 
