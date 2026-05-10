@@ -31,20 +31,20 @@ export const useModalPosition = (listRef, parentRef, triggerKey): boolean => {
     recalcPosition()
   }, [triggerKey, recalcPosition])
 
-  useEffect(() => {
-    if (!listRef.current) return
+  // useEffect(() => {
+  //   if (!listRef.current) return
 
-    const observer = new ResizeObserver(() => recalcPosition())
+  //   const observer = new ResizeObserver(() => recalcPosition())
 
-    observer.observe(listRef.current)
+  //   observer.observe(listRef.current)
 
-    return () => observer.disconnect()
-  }, [recalcPosition])
+  //   return () => observer.disconnect()
+  // }, [recalcPosition])
 
-  useEffect(() => {
-    window.addEventListener('resize', recalcPosition)
-    return () => window.removeEventListener('resize', recalcPosition)
-  }, [recalcPosition])
+  // useEffect(() => {
+  //   window.addEventListener('resize', recalcPosition)
+  //   return () => window.removeEventListener('resize', recalcPosition)
+  // }, [recalcPosition])
 
   return isToMove
 }
