@@ -109,7 +109,7 @@ export default function LeagueSelectModal({
     navigate(routerPath.SUBMISSION)
   }
 
-  const prefetchTeams = (leagueId: leagueListProps['id']) => {
+  const prefetchTeamIds = (leagueId: leagueListProps['id']) => {
     // 리그 팀 id 조회
     const teamsIds: number[] | undefined = queryClient.getQueryData(
       queryKeysMain.teams.idsByLeaguePersisted(leagueId),
@@ -124,7 +124,7 @@ export default function LeagueSelectModal({
     }
   }
 
-  const prefetchPlayers = (leagueId: leagueListProps['id']) => {
+  const prefetchPlayerIds = (leagueId: leagueListProps['id']) => {
     // league id 기준 선수 id 조회
     const playersId: number[] | undefined = queryClient.getQueryData(
       queryKeysMain.players.idsByLeaguePersisted(leagueId),
@@ -148,8 +148,8 @@ export default function LeagueSelectModal({
   const prefetchingLeagueData = useMemo(
     () =>
       debounce((leagueId: leagueListProps['id']) => {
-        prefetchTeams(leagueId)
-        prefetchPlayers(leagueId)
+        prefetchTeamIds(leagueId)
+        prefetchPlayerIds(leagueId)
       }, 200),
     [],
   )
