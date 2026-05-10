@@ -1,26 +1,30 @@
-import { useQuery } from '@tanstack/react-query'
+import {
+  useQueries,
+  useQuery,
+  type UseQueryOptions,
+} from '@tanstack/react-query'
 import { fetchTeam, fetchTeamIdsInLeague } from '../services/clientService'
 import type { IFirebaseTeamDetail } from '../types'
+import { queryKeysMain } from '@/lib/queryKeys'
 
 const useFetchingTeamsDataInLeague = (leagueId: number) => {
-  const {
-    isPending,
-    error,
-    data: teamsInLeague,
-    refetch,
-  } = useQuery<IFirebaseTeamDetail[], Error>({
-    queryKey: ['teams', 'league', leagueId],
-    queryFn: async () => {
-      const teamIds = await fetchTeamIdsInLeague(leagueId)
+  const teamIdsQuery = useQuery<number[], Error>({
+    queryKey: queryKeysMain.teams.idsByLeaguePersisted(leagueId),
+    queryFn: async () => fetchTeamIdsInLeague(leagueId),
 
-      const promiseArr = teamIds.map(id => fetchTeam(id))
-      const teams = await Promise.all(promiseArr)
-
-      return teams.filter(team => team !== null)
-    },
+    enabled: !!leagueId,
   })
 
-  return { isPending, error, teamsInLeague, refetch }
+  const teamDatasQuery = useQueries({
+    queries: (teamIdsQuery.data ?? []).map<
+      UseQueryOptions<IFirebaseTeamDetail, Error>
+    >(teamId => ({
+      queryKey: queryKeysMain.teams.detail(teamId),
+      queryFn: () => fetchTeam(teamId),
+    })),
+  })
+
+  return { teamIdsQuery, teamDatasQuery }
 }
 
 export default useFetchingTeamsDataInLeague
