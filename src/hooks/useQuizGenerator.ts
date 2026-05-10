@@ -12,18 +12,21 @@ const useQuizGenerator = (
   let newQuiz
 
   const generateQuiz = () => {
+    if (!players?.length) return
+
     setQuiz(prevQuiz => {
-      if (players?.length) {
-        const length = players.length
-        const randomIdx = Math.floor(Math.random() * length)
-        newQuiz = players[randomIdx]
+      const length = players.length
 
-        while (prevQuiz?.id === newQuiz.id) {
-          newQuiz = players[Math.floor(Math.random() * length)]
-        }
+      if (length === 1) return players[0]
 
-        return newQuiz
+      const randomIdx = Math.floor(Math.random() * length)
+      newQuiz = players[randomIdx]
+
+      while (prevQuiz?.id === newQuiz.id) {
+        newQuiz = players[Math.floor(Math.random() * length)]
       }
+
+      return newQuiz
     })
   }
   return { generateQuiz }
