@@ -68,7 +68,11 @@ const Club = ({ logo, name, id }: IFirebaseTeamDetail) => {
       >
         <Emblem src={logo} alt={name} ref={parentRef} width='60' height='60' />
         {activeModal && onLazyModal && isHover && (
-          <ClubSquadModal id={id} parentRef={parentRef} offModal={offModal} />
+          <>
+            {/* <ProfileComp id={`ClubSquadModal-${id}`}> */}
+            <ClubSquadModal id={id} parentRef={parentRef} offModal={offModal} />
+            {/* </ProfileComp> */}
+          </>
         )}
       </Container>
       {/* </ProfileComp> */}

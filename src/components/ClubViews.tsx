@@ -126,6 +126,10 @@ const ClubViews = () => {
               <ClubSkeleton key={idx} />
             ))
           : teamDatasQuery.map((q, idx) =>
+              // <>
+              //   <ProfileComp key={q.data.id} id={`Club-${q.data.id}`}>
+              //   </ProfileComp>
+              //   </>
               q.data ? (
                 <Club key={q.data.id} {...q.data} />
               ) : (
