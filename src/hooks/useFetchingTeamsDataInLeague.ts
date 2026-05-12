@@ -10,13 +10,12 @@ import { queryKeysMain } from '@/lib/queryKeys'
 const useFetchingTeamsDataInLeague = (leagueId: number) => {
   const teamIdsQuery = useQuery<number[], Error>({
     queryKey: queryKeysMain.teams.idsByLeaguePersisted(leagueId),
-    queryFn: async () => fetchTeamIdsInLeague(leagueId),
-
+    queryFn: () => fetchTeamIdsInLeague(leagueId),
     enabled: !!leagueId,
   })
 
   const teamDatasQuery = useQueries({
-    queries: (teamIdsQuery.data ?? []).map<
+    queries: ((teamIdsQuery.data ?? []) as number[]).map<
       UseQueryOptions<IFirebaseTeamDetail, Error>
     >(teamId => ({
       queryKey: queryKeysMain.teams.detail(teamId),
