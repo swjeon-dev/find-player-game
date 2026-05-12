@@ -1,39 +1,23 @@
-import { useRecoilValue } from 'recoil'
+import { useEffect } from 'react'
 
-import useFetchingPlayersDataInLeague from '@/hooks/useFetchingPlayersDataInLeague'
-import useFetchingPlayersIdInLeague from '@/hooks/useFetchingPlayersIdInLeague'
-import { leagueInfoState } from '@/state'
+import useQuizGenerator from '@/hooks/useQuizGenerator'
 import SubmissionCard from './components/SubmissionCard'
 import { SubmissionLoader } from './components/SubmissionLoader'
 import { Container } from './styles'
+import ProfileComp from '../Profiler'
 
 export default function SubmissionGameContainer() {
-  const leagueInfo = useRecoilValue(leagueInfoState)
+  const { generateQuiz, isGeneratingQuiz, quizError } = useQuizGenerator()
 
-  const {
-    isPending: isIdsPending,
-    error: idsError,
-    playersId,
-    refetch: refetchPlayersId,
-  } = useFetchingPlayersIdInLeague({
-    leagueId: leagueInfo.id,
-  })
-  const {
-    isPending: isPlayersPending,
-    error: playersError,
-    playersInLeague: squad,
-  } = useFetchingPlayersDataInLeague({
-    leagueId: leagueInfo.id,
-    playerIds: playersId,
-  })
+  useEffect(() => {
+    generateQuiz()
+  }, [])
 
-  const isPending = isIdsPending || isPlayersPending
-  const isSearchUnavailable = !!idsError || !!playersError
   const retryFetching = () => {
-    refetchPlayersId()
+    generateQuiz()
   }
 
-  if (isSearchUnavailable) {
+  if (quizError) {
     return (
       <SubmissionLoader
         message='선수 데이터를 불러오는 데 실패했습니다. 잠시 후 다시 시도해주세요.'
@@ -41,9 +25,15 @@ export default function SubmissionGameContainer() {
       />
     )
   }
+
   return (
     <Container>
-      <SubmissionCard isPending={isPending} squad={squad ?? []} />
+      {/* <ProfileComp id='SubmissionGameContainer'> */}
+      <SubmissionCard
+        isPending={isGeneratingQuiz}
+        generateQuiz={generateQuiz}
+      />
+      {/* </ProfileComp> */}
     </Container>
   )
 }

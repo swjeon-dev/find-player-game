@@ -1,25 +1,27 @@
+import { useRecoilValue } from 'recoil'
+
 import SearchForm from '@/components/SearchForm'
 import HintBox from '@/components/HintBox'
-import type { IFirebasePlayer } from '@/api/api.types'
-
+import { quizState } from '@/state'
 import ChangeButton from './ChangeButton'
 import useSubmissionGame from '../hooks/useSubmissionGame'
-import { FormContainer, Photo, PhotoSkeleton } from '../styles'
+import { FormContainer, Photo, PhotoSkeleton } from './SubmissionCard.styles'
 
 interface SubmissionCardProps {
   isPending: boolean
-  squad: IFirebasePlayer[]
+  generateQuiz: () => void
 }
 
-const SubmissionCard = ({ isPending, squad }: SubmissionCardProps) => {
-  const { quiz, hintArr, isCorrect, setIsCorrect, setHintArr, changeQuiz } =
-    useSubmissionGame(squad)
+const SubmissionCard = ({ isPending, generateQuiz }: SubmissionCardProps) => {
+  const quiz = useRecoilValue(quizState)
+  const { hintArr, isCorrect, setIsCorrect, setHintArr, changeQuiz } =
+    useSubmissionGame({ generateQuiz })
 
   const isDisabled = isPending || isCorrect
 
   return (
     <>
-      <FormContainer $isPending={isPending}>
+      <FormContainer $isPending={isPending} role='submission-card'>
         {isPending ? (
           <PhotoSkeleton />
         ) : (
@@ -34,18 +36,15 @@ const SubmissionCard = ({ isPending, squad }: SubmissionCardProps) => {
           />
         )}
 
-        {quiz ? (
-          <SearchForm
-            squad={squad}
-            quiz={quiz}
-            disabled={isDisabled}
-            setIsCorrect={setIsCorrect}
-            setHintArr={setHintArr}
-          />
-        ) : null}
+        <SearchForm
+          quiz={quiz}
+          disabled={isDisabled}
+          setIsCorrect={setIsCorrect}
+          setHintArr={setHintArr}
+        />
       </FormContainer>
 
-      {hintArr.length > 0 ? <HintBox hintArr={hintArr} /> : null}
+      <HintBox hintArr={hintArr} />
       <ChangeButton onClick={changeQuiz} />
     </>
   )

@@ -1,18 +1,19 @@
-import { useEffect, useState } from 'react'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { useState } from 'react'
+import { useSetRecoilState } from 'recoil'
 
-import useQuizGenerator from '@/hooks/useQuizGenerator'
-import { inputState, quizState } from '@/state'
-import type { IFirebasePlayer } from '@/api/api.types'
+import { inputState } from '@/state'
 import type { IHint } from '@/types'
 
-const useSubmissionGame = (squad: IFirebasePlayer[]) => {
+interface IUseSubmissionGameProps {
+  generateQuiz: () => void
+}
+
+// 퀴즈 변경 및 리셋 시 UI 변경 책임 hook
+const useSubmissionGame = ({ generateQuiz }: IUseSubmissionGameProps) => {
   const [hintArr, setHintArr] = useState<IHint[]>([])
   const [isCorrect, setIsCorrect] = useState(false)
 
   const setInputValue = useSetRecoilState(inputState)
-  const quiz = useRecoilValue(quizState)
-  const { generateQuiz } = useQuizGenerator(squad)
 
   const resetQuiz = () => {
     setIsCorrect(false)
@@ -25,13 +26,7 @@ const useSubmissionGame = (squad: IFirebasePlayer[]) => {
     resetQuiz()
   }
 
-  useEffect(() => {
-    if (!squad?.length) return
-    generateQuiz()
-  }, [squad, generateQuiz])
-
   return {
-    quiz,
     hintArr,
     isCorrect,
     setIsCorrect,
