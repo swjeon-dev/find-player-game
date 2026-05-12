@@ -11,6 +11,7 @@ const useFetchingPlayersIdInLeague = ({ leagueId }: { leagueId: number }) => {
     isPending,
     error,
     data: playersId,
+    dataUpdatedAt,
     refetch,
   } = useQuery<number[], Error>({
     queryKey: queryKeysMain.players.idsByLeaguePersisted(leagueId),
@@ -26,7 +27,7 @@ const useFetchingPlayersIdInLeague = ({ leagueId }: { leagueId: number }) => {
     })
   }, [leagueId, playersId, queryClient])
 
-  return { isPending, error, playersId, refetch }
+  return { isPending, error, playersId, refetch, dataUpdatedAt }
 }
 
 export default useFetchingPlayersIdInLeague
