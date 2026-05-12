@@ -10,7 +10,7 @@ export default function Submission() {
         <title>Quiz | Find Football Player</title>
       </Helmet>
       <ClubViews />
-      {/* <SubmissionGameContainer /> */}
+      <SubmissionGameContainer />
     </>
   )
 }
