@@ -1,5 +1,6 @@
 import styled from 'styled-components'
-import { Position } from '@/api/api.types'
+
+import { Position, type IFirebasePlayer } from '@/api/api.types'
 import type { IHint } from '@/types'
 
 const HintList = styled.ul`
@@ -7,6 +8,19 @@ const HintList = styled.ul`
 `
 const HintItem = styled.li`
   margin-top: 60px;
+
+  /* 분리해서 에니메이션 적용 */
+  animation: fadeIn 0.5s ease-in-out forwards;
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateX(-5%);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
 `
 const MyAnswer = styled.h3`
   font-size: 25px;
@@ -54,8 +68,9 @@ const Label = styled.label`
 `
 
 const ClubEmblem = styled.img`
-  width: 25px;
-  height: 25px;
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
 `
 
 interface IHintBoxProps {
@@ -63,104 +78,82 @@ interface IHintBoxProps {
 }
 
 const HintBox = ({ hintArr }: IHintBoxProps) => {
-  return (
-    hintArr &&
-    hintArr.length > 0 && (
-      <HintList>
-        {hintArr.map(({ q, a }) => {
-          const {
-            teamId: qTeamId,
-            number: qNumber,
-            age: qAge,
-            position: qPosition,
-          } = q
-          const {
-            teamId: aTeamId,
-            number: aNumber,
-            name: aName,
-            age: aAge,
-            position: aPosition,
-          } = a
+  const hintColumns = (q: IFirebasePlayer, a: IFirebasePlayer) =>
+    [
+      {
+        label: '클럽 이름',
+        value: q.teamId === a.teamId,
+        children: (
+          <ClubEmblem
+            src={a.teamLogo}
+            alt={a.teamId.toString()}
+            width='45'
+            height='45'
+          />
+        ),
+      },
+      {
+        label: '포지션',
+        value: q.position === a.position,
+        children: <span>{Position[a.position]}</span>,
+      },
+      {
+        label: '등 번호',
+        value: q.number === a.number,
+        children: (
+          <>
+            <span>{a.number}</span>
+            <span>
+              {q.number > a.number ? '⬆' : q.number < a.number ? '⬇︎' : ''}
+            </span>
+          </>
+        ),
+      },
+      {
+        label: '나이',
+        value: q.age === a.age,
+        children: (
+          <>
+            <span>{a.age}</span>
+            <span>{q.age > a.age ? '⬆' : q.age < a.age ? '⬇︎' : ''}</span>
+          </>
+        ),
+      },
+    ].map((col, idx) => (
+      <HintColumnWrapper key={idx} label={col.label} isEqualValue={col.value}>
+        {col.children}
+      </HintColumnWrapper>
+    ))
 
-          return (
-            <HintItem key={a.id}>
-              <MyAnswer>{aName}</MyAnswer>
-              <Row>
-                {[
-                  {
-                    label: '클럽 이름',
-                    value: qTeamId === aTeamId,
-                    children: (
-                      <ClubEmblem
-                        src={a.teamLogo}
-                        alt={a.teamId.toString()}
-                        width='25'
-                        height='25'
-                      />
-                    ),
-                  },
-                  {
-                    label: '포지션',
-                    value: qPosition === aPosition,
-                    children: <span>{Position[aPosition]}</span>,
-                  },
-                  {
-                    label: '등 번호',
-                    value: qNumber === aNumber,
-                    children: (
-                      <>
-                        <span>{aNumber}</span>
-                        <span>
-                          {qNumber > aNumber
-                            ? '⬆'
-                            : qNumber < aNumber
-                              ? '⬇︎'
-                              : ''}
-                        </span>
-                      </>
-                    ),
-                  },
-                  {
-                    label: '나이',
-                    value: qAge === aAge,
-                    children: (
-                      <>
-                        <span>{aAge}</span>
-                        <span>
-                          {qAge > aAge ? '⬆' : qAge < aAge ? '⬇︎' : ''}
-                        </span>
-                      </>
-                    ),
-                  },
-                ].map((col, idx) => {
-                  return (
-                    <HintColumn
-                      key={idx}
-                      label={col.label}
-                      isEqualValue={col.value}
-                    >
-                      {col.children}
-                    </HintColumn>
-                  )
-                })}
-              </Row>
-            </HintItem>
-          )
-        })}
-      </HintList>
-    )
+  if (!hintArr?.length) {
+    return null
+  }
+
+  return (
+    <HintList>
+      {hintArr.map(({ q, a }) => (
+        <HintItem key={a.id}>
+          <MyAnswer>{a.name}</MyAnswer>
+          <Row>{hintColumns(q, a)}</Row>
+        </HintItem>
+      ))}
+    </HintList>
   )
 }
 
 export default HintBox
 
-interface IHintColumn {
+interface IHintColumnWrapper {
   isEqualValue: boolean
   children: React.ReactNode
   label: string
 }
 
-function HintColumn({ isEqualValue, children, label }: IHintColumn) {
+function HintColumnWrapper({
+  isEqualValue,
+  children,
+  label,
+}: IHintColumnWrapper) {
   return (
     <Hint $isEqual={isEqualValue}>
       {children}
