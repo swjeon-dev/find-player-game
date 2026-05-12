@@ -138,6 +138,7 @@ export default function LeagueSelectModal({
       })
     }
 
+    // TODO: 삭제 예정, 선수 데이터를 프리페칭하면 네트워크 요청 수가 많아져 성능 저하 (id만 프리페칭 하거나 조회)
     // 프리페치: 선수 id 기준 선수 데이터 조회 > 리그 선수 데이터 조회
     return queryClient.prefetchQuery({
       queryKey: queryKeysMain.players.byLeague(leagueId),

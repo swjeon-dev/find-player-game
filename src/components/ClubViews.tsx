@@ -104,6 +104,7 @@ const ClubViews = () => {
   const { teamIdsQuery, teamDatasQuery } = useFetchingTeamsDataInLeague(
     leagueInfo.id,
   )
+
   if (teamIdsQuery.error) {
     return (
       <ErrorBox>
@@ -131,7 +132,7 @@ const ClubViews = () => {
               //   </ProfileComp>
               //   </>
               q.data ? (
-                <Club key={q.data.id} {...q.data} />
+                <Club key={`club-${q.data.id}`} {...q.data} />
               ) : (
                 <ClubSkeleton key={idx} />
               ),
