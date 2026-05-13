@@ -1,7 +1,9 @@
-import { memo, useRef, useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
+import { memo, useEffect, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import routerPath from '@/constant/routerPath'
+import { prefetchTeamPlayersId } from '@/hooks/useFetchingTeamPlayers'
 import ClubSquadModal from './ClubSquadModal'
 import type { IFirebaseTeamDetail } from '../types'
 import useDebouncedValue from '../hooks/useDebouncedValue'
@@ -39,6 +41,7 @@ const Emblem = styled.img`
 const pathWithBasename = `/find-player-game${routerPath.SUBMISSION}`
 
 const Club = ({ logo, name, id }: IFirebaseTeamDetail) => {
+  const queryClient = useQueryClient()
   const [isHover, setIsHover] = useState(false)
   const [clicked, setClicked] = useState(false)
   const onLazyModal = useDebouncedValue(isHover, 300)
@@ -58,6 +61,12 @@ const Club = ({ logo, name, id }: IFirebaseTeamDetail) => {
     setIsHover(false)
     setClicked(true)
   }
+
+  useEffect(() => {
+    if (!id) return
+    prefetchTeamPlayersId(queryClient, { teamId: id })
+  }, [id, queryClient])
+
   return (
     <>
       {/* <ProfileComp id='Club'> */}
@@ -70,7 +79,11 @@ const Club = ({ logo, name, id }: IFirebaseTeamDetail) => {
         {activeModal && onLazyModal && isHover && (
           <>
             {/* <ProfileComp id={`ClubSquadModal-${id}`}> */}
-            <ClubSquadModal id={id} parentRef={parentRef} offModal={offModal} />
+            <ClubSquadModal
+              teamId={id}
+              parentRef={parentRef}
+              offModal={offModal}
+            />
             {/* </ProfileComp> */}
           </>
         )}
