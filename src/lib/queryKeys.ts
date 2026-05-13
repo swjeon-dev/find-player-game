@@ -1,9 +1,8 @@
 export const queryKeysMain = {
   players: {
-    filteringByName: (capitalizedValue: string) =>
-      ['players', 'filtering', 'name', capitalizedValue] as const,
-    one: (playerId: number) => ['players', playerId] as const,
     all: ['players'] as const,
+    // 팀의 선수 id 조회
+    one: (playerId: number) => ['player', playerId] as const,
 
     // 리그의 선수 데이터 조회
     byLeague: (leagueId: number) =>
@@ -16,7 +15,12 @@ export const queryKeysMain = {
     // 리그의 선수 id 조회
     idsByLeaguePersisted: (leagueId: number) =>
       ['persist', 'players', 'ids', 'league', leagueId] as const,
+    filteringByName: (capitalizedValue: string) =>
+      ['players', 'filtering', 'name', capitalizedValue] as const,
+    // 팀의 선수 id 조회
+    idsByTeam: (teamId: number) => ['players', 'ids', 'team', teamId] as const,
   },
+
   teams: {
     all: ['teams'] as const,
 
