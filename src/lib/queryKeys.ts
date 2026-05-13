@@ -1,5 +1,8 @@
 export const queryKeysMain = {
   players: {
+    filteringByName: (capitalizedValue: string) =>
+      ['players', 'filtering', 'name', capitalizedValue] as const,
+    one: (playerId: number) => ['players', playerId] as const,
     all: ['players'] as const,
 
     // 리그의 선수 데이터 조회
