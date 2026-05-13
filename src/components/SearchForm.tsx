@@ -1,22 +1,23 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import styled from 'styled-components'
 
 import useDebouncedValue from '@/hooks/useDebouncedValue'
 import { inputState } from '@/state'
-import AutoSearch from './AutoSearch'
 import type { IHint } from '@/types'
 import type { IFirebasePlayer } from '@/api/api.types'
+import { useFilteringPlayersName } from '@/hooks/useFilteringPlayersName'
+import AutoSearch from './AutoSearch'
 
 interface IForm {
   quiz: IFirebasePlayer
-  squad: IFirebasePlayer[]
   disabled: boolean
   setIsCorrect: React.Dispatch<boolean>
   setHintArr: React.Dispatch<React.SetStateAction<IHint[]>>
 }
 
-const Form = styled.form`
+const Form = styled.div`
+  position: relative;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -24,6 +25,14 @@ const Form = styled.form`
   align-items: center;
   gap: 10px;
 `
+
+const InputWrap = styled.div`
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`
+
 const Input = styled.input`
   width: 70%;
   height: 35px;
@@ -39,45 +48,59 @@ const Input = styled.input`
   }
 `
 
-function SearchForm({
-  quiz,
-  squad,
-  disabled,
-  setIsCorrect,
-  setHintArr,
-}: IForm) {
-  const [value, setValue] = useRecoilState(inputState)
-
+function useAutocompleteListFocus(value: string) {
   const [focusedIndex, setFocusedIndex] = useState(-1)
+  useEffect(() => {
+    setFocusedIndex(-1)
+  }, [value])
+  return { focusedIndex, setFocusedIndex }
+}
 
+function SearchForm({ quiz, disabled, setIsCorrect, setHintArr }: IForm) {
+  if (!quiz) return null
+
+  return (
+    <SearchFormInner
+      quiz={quiz}
+      disabled={disabled}
+      setIsCorrect={setIsCorrect}
+      setHintArr={setHintArr}
+    />
+  )
+}
+
+function SearchFormInner({ quiz, disabled, setIsCorrect, setHintArr }: IForm) {
+  const [value, setValue] = useRecoilState(inputState)
   const debouncedValue = useDebouncedValue(value, 500)
+  const { focusedIndex, setFocusedIndex } =
+    useAutocompleteListFocus(debouncedValue)
+
+  const { searchingPlayers, resetPlayers } = useFilteringPlayersName({
+    debouncedValue,
+  })
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.currentTarget.value)
   }
 
-  const filteredPlayerss: IFirebasePlayer[] = useMemo(() => {
-    if (disabled) return []
-    if (debouncedValue.length < 3) return []
-
-    const regex = new RegExp(debouncedValue, 'i')
-    return squad.filter(player => regex.test(player.name))
-  }, [squad, debouncedValue, disabled])
-
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (filteredPlayerss.length === 0) return
+    if (searchingPlayers.length === 0) return
 
     if (e.key === 'ArrowDown') {
       e.preventDefault()
       setFocusedIndex(prev =>
-        prev < filteredPlayerss.length - 1 ? prev + 1 : prev,
+        prev < searchingPlayers.length - 1 ? prev + 1 : prev,
       )
     } else if (e.key === 'ArrowUp') {
       e.preventDefault()
-      setFocusedIndex(prev => (prev > 0 ? prev - 1 : prev))
+      if (focusedIndex === 0) {
+        setFocusedIndex(searchingPlayers.length - 1)
+      } else {
+        setFocusedIndex(prev => (prev > 0 ? prev - 1 : prev))
+      }
     } else if (e.key === 'Enter') {
       const targetPlayer =
-        filteredPlayerss[focusedIndex === -1 ? 0 : focusedIndex]
+        searchingPlayers[focusedIndex === -1 ? 0 : focusedIndex]
       if (targetPlayer) handleSelect(targetPlayer)
     } else if (e.key === 'Escape') {
       setFocusedIndex(-1)
@@ -87,9 +110,9 @@ function SearchForm({
   const handleSelect = (player: IFirebasePlayer) => {
     setFocusedIndex(-1)
     submitPlayer(player)
+    resetPlayers()
   }
 
-  // 기존 onSubmit의 핵심 로직을 별도 함수로 분리
   const submitPlayer = (player: IFirebasePlayer) => {
     if (disabled) return
     const hintObj: IHint = { q: quiz, a: player }
@@ -110,36 +133,26 @@ function SearchForm({
     }
   }
 
-  const onSubmit = (e: React.SubmitEvent) => e.preventDefault()
-
-  useEffect(() => {
-    setValue('')
-  }, [])
-
-  // 검색어가 바뀌면 포커스 초기화
-  useEffect(() => {
-    setFocusedIndex(-1)
-  }, [debouncedValue])
-
   return (
-    <Form onSubmit={onSubmit}>
-      <Input
-        name='search'
-        disabled={disabled}
-        onKeyDown={onKeyDown}
-        value={value}
-        onChange={onChange}
-        placeholder='Write a Full-name'
-        autoComplete='off'
-      />
+    <Form role='search'>
+      <InputWrap>
+        <Input
+          name='search'
+          disabled={disabled}
+          onKeyDown={onKeyDown}
+          value={value}
+          onChange={onChange}
+          placeholder='Write a Full-name'
+          autoComplete='off'
+          autoFocus={true}
+        />
 
-      {debouncedValue.length > 2 && (
         <AutoSearch
-          filteredPlayers={filteredPlayerss}
+          searchingPlayers={searchingPlayers}
           handleSelect={handleSelect}
           focusedIndex={focusedIndex}
         />
-      )}
+      </InputWrap>
     </Form>
   )
 }

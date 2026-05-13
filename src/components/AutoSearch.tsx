@@ -1,8 +1,14 @@
 import styled, { css } from 'styled-components'
+
 import { useEffect, useRef } from 'react'
 import type { IFirebasePlayer } from '@/api/api.types'
 
 const AutoSearchBox = styled.ul`
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
   width: 70%;
   max-height: 200px;
   overflow-y: auto;
@@ -44,53 +50,48 @@ const ClubEmblem = styled.img`
 const Name = styled.span`
   margin: auto 0;
 `
+
 interface IAutoSearchProps {
-  filteredPlayers: IFirebasePlayer[]
+  searchingPlayers: IFirebasePlayer[]
   handleSelect: (player: IFirebasePlayer) => void
   focusedIndex: number
 }
 
 const AutoSearch = ({
-  filteredPlayers,
+  searchingPlayers,
   handleSelect,
   focusedIndex,
 }: IAutoSearchProps) => {
-  const listRef = useRef(null)
+  const listRef = useRef<HTMLUListElement>(null)
 
   useEffect(() => {
-    if (focusedIndex >= 0 && listRef.current) {
-      const selectElement = listRef.current.children[
-        focusedIndex
-      ] as HTMLUListElement
-      if (selectElement) {
-        selectElement.scrollIntoView({ behavior: 'auto', block: 'nearest' })
-      }
-    }
+    if (focusedIndex < 0 || !listRef.current) return
+    const el = listRef.current.children[focusedIndex] as HTMLElement | undefined
+    el?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
   }, [focusedIndex])
 
+  const hasResults = searchingPlayers.length > 0
+  if (!hasResults) return null
+
   return (
-    filteredPlayers?.length > 0 && (
-      <AutoSearchBox ref={listRef}>
-        {filteredPlayers.map((player, idx) => {
-          return (
-            <PlayerBox
-              key={player.id}
-              type='button'
-              $selected={focusedIndex === idx}
-              onClick={() => handleSelect(player)}
-            >
-              <ClubEmblem
-                src={player.teamLogo || ''}
-                alt={player.teamId.toString()}
-                width='25'
-                height='25'
-              />
-              <Name>{player.name}</Name>
-            </PlayerBox>
-          )
-        })}
-      </AutoSearchBox>
-    )
+    <AutoSearchBox ref={listRef}>
+      {searchingPlayers.map((player, idx) => (
+        <PlayerBox
+          key={`player-${player.id}`}
+          type='button'
+          $selected={focusedIndex === idx}
+          onClick={() => handleSelect(player)}
+        >
+          <ClubEmblem
+            src={player.teamLogo || ''}
+            alt={player.teamId.toString()}
+            width='25'
+            height='25'
+          />
+          <Name>{player.name}</Name>
+        </PlayerBox>
+      ))}
+    </AutoSearchBox>
   )
 }
 
