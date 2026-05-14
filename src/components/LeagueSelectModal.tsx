@@ -1,5 +1,5 @@
 import { createPortal } from 'react-dom'
-import { useEffect, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { useSetRecoilState } from 'recoil'
@@ -95,14 +95,22 @@ function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
   }
 }
 
+interface LeagueSelectModalProps {
+  children: (handlers: { openModal: () => void }) => React.ReactNode
+}
+
 export default function LeagueSelectModal({
-  closeModal,
-}: {
-  closeModal: () => void
-}) {
+  children,
+}: LeagueSelectModalProps) {
+  const [isOpen, setIsOpen] = useState(false)
   const dialogRef = useRef<HTMLDialogElement>(null)
   const navigate = useNavigate()
   const setLeagueInfo = useSetRecoilState(leagueInfoState)
+
+  const closeModal = useCallback(() => {
+    dialogRef.current?.close()
+    setIsOpen(false)
+  }, [])
 
   const setLeagueRange = (league: leagueListProps) => {
     setLeagueInfo({ id: league.id })
@@ -156,44 +164,52 @@ export default function LeagueSelectModal({
   )
 
   useEffect(() => {
-    if (!dialogRef.current?.open) {
-      dialogRef.current?.showModal()
-      dialogRef.current?.scrollTo({ top: 0 })
-    }
-  }, [])
+    if (!isOpen) return
 
-  return createPortal(
-    <Dialog
-      ref={dialogRef}
-      onMouseDown={e => {
-        if (e.target === e.currentTarget) {
-          closeModal()
-        }
-      }}
-      onClose={closeModal}
-    >
-      <Container onClick={e => e.stopPropagation()}>
-        <Title>Select League you want</Title>
-        <BoxContainer>
-          {leagueList.map(league => (
-            <Box
-              key={`league-${league.name}`}
-              onClick={() => setLeagueRange(league)}
-              onMouseEnter={() => prefetchingLeagueData(league.id)}
-              aria-label={`${league.name} 리그 선택 버튼`}
-            >
-              <Emblem
-                src={league.emblemImage}
-                width='70'
-                height='70'
-                alt={`${league.name} emblem image`}
-              />
-              <Span>PL</Span>
-            </Box>
-          ))}
-        </BoxContainer>
-      </Container>
-    </Dialog>,
-    document.getElementById('modal-root') as HTMLElement,
+    if (dialogRef.current && !dialogRef.current.open) {
+      dialogRef.current.showModal()
+      dialogRef.current.scrollTo({ top: 0 })
+    }
+  }, [isOpen])
+
+  return (
+    <>
+      {children({ openModal: () => setIsOpen(true) })}
+      {isOpen &&
+        createPortal(
+          <Dialog
+            ref={dialogRef}
+            onMouseDown={e => {
+              if (e.target === e.currentTarget) {
+                closeModal()
+              }
+            }}
+            onClose={closeModal}
+          >
+            <Container onClick={e => e.stopPropagation()}>
+              <Title>Select League you want</Title>
+              <BoxContainer>
+                {leagueList.map(league => (
+                  <Box
+                    key={`league-${league.name}`}
+                    onClick={() => setLeagueRange(league)}
+                    onMouseEnter={() => prefetchingLeagueData(league.id)}
+                    aria-label={`${league.name} 리그 선택 버튼`}
+                  >
+                    <Emblem
+                      src={league.emblemImage}
+                      width='70'
+                      height='70'
+                      alt={`${league.name} emblem image`}
+                    />
+                    <Span>PL</Span>
+                  </Box>
+                ))}
+              </BoxContainer>
+            </Container>
+          </Dialog>,
+          document.getElementById('modal-root') as HTMLElement,
+        )}
+    </>
   )
 }

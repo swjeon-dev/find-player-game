@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import styled from 'styled-components'
 
 import LeagueSelectModal from '@/components/LeagueSelectModal'
@@ -20,6 +19,7 @@ const Button = styled.button`
     width: 100%;
   }
 `
+
 const Span = styled.span`
   font-size: 50px;
   font-weight: bold;
@@ -28,15 +28,13 @@ const Span = styled.span`
 `
 
 export const Cover = () => {
-  const [onModal, setOnModal] = useState(false)
-  const handleClick = () => {
-    setOnModal(true)
-  }
-
   return (
-    <Button onClick={handleClick}>
-      <Span>Game Start</Span>
-      {onModal && <LeagueSelectModal closeModal={() => setOnModal(false)} />}
-    </Button>
+    <LeagueSelectModal>
+      {({ openModal }) => (
+        <Button type='button' onClick={openModal}>
+          <Span>Game Start</Span>
+        </Button>
+      )}
+    </LeagueSelectModal>
   )
 }
