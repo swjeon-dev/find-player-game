@@ -182,6 +182,16 @@ Vite + TypeScript 환경으로 마이그레이션했습니다.
 - 불필요한 API 요청 감소 및 데이터 응답 안정성 확보
 - 사용자 입력 시 지연 없이 자연스러운 인터랙션 경험 제공
 
+### Lighthouse (로컬 측정 → README 동기화 예시)
+
+1. `npm run build` 후 `npx lhci collect` (또는 `lhci autorun`)
+2. `npm run sync:lighthouse-readme`
+3. README의 아래 표가 `.lighthouseci/lhr-*.json` 기준으로 갱신됩니다. 확인 후 커밋합니다.
+
+<!-- LIGHTHOUSE_SCORES_START -->
+_(아직 측정하지 않았다면 1번을 실행한 뒤 2번을 실행합니다.)_
+<!-- LIGHTHOUSE_SCORES_END -->
+
 ## 9. 개선 방향
 
 - 테스트 코드 도입
@@ -195,3 +205,14 @@ Vite + TypeScript 환경으로 마이그레이션했습니다.
 npm install
 npm run dev
 ```
+
+---
+
+참고 자료
+
+#### 성능 관련 CI/CD
+
+- Lighthouse CI: [카카오엔터 기술 블로그](https://tech.kakaoent.com/front-end/2022/220602-lighthouse-with-github-actions/)
+- bundleSize
+- Webpack Bundle Analyzer
+- PageSpeed: [PageSpeed Insights](https://pagespeed.web.dev/)
