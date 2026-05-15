@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react'
 import { useSetRecoilState } from 'recoil'
 
 import { inputState } from '@/state'
@@ -6,45 +6,55 @@ import { inputState } from '@/state'
 export const useSelectPlayer = (cb: () => void) => {
   const setValue = useSetRecoilState(inputState)
 
-  return useCallback((name: string) => {
-    setValue(name)
-    cb()
-  }, [])
+  return useCallback(
+    (name: string) => {
+      setValue(name)
+      cb()
+    },
+    [cb, setValue],
+  )
 }
 
-export const useModalPosition = (listRef, parentRef, triggerKey): boolean => {
-  const [isToMove, setIsToMove] = useState(false)
+// props 타입 정의
+interface IUseModalPositionProps {
+  listRef: React.RefObject<HTMLUListElement>
+  parentRef: React.RefObject<HTMLElement>
+  triggerKey: number
+}
+
+export const useModalPosition = ({
+  listRef,
+  parentRef,
+  triggerKey,
+}: IUseModalPositionProps): { x: boolean; y: boolean } => {
+  const [isTransfer, setIsTransfer] = useState({ x: false, y: false })
 
   const recalcPosition = useCallback(() => {
     if (!listRef.current || !parentRef.current) return
 
-    const { bottom } = parentRef.current.getBoundingClientRect()
-    const playListHeight = listRef.current.clientHeight
-    const screenHeight = window.innerHeight
+    const { innerWidth, innerHeight } = window
+    const rect = parentRef.current.getBoundingClientRect()
+    const { clientHeight, clientWidth } = listRef.current
 
-    const isListToTransfer = screenHeight - bottom < playListHeight
+    const isTransferYPosition = innerHeight - rect.bottom < clientHeight
+    const isTransferXPosition = innerWidth - rect.right + 50 < clientWidth
 
-    setIsToMove(isListToTransfer)
+    setIsTransfer({ x: isTransferXPosition, y: isTransferYPosition })
   }, [listRef, parentRef])
+
+  useLayoutEffect(() => {
+    if (!listRef.current) return
+
+    const observer = new ResizeObserver(recalcPosition)
+
+    observer.observe(listRef.current as Element)
+
+    return () => observer.disconnect()
+  }, [recalcPosition, triggerKey])
 
   useEffect(() => {
     recalcPosition()
   }, [triggerKey, recalcPosition])
 
-  // useEffect(() => {
-  //   if (!listRef.current) return
-
-  //   const observer = new ResizeObserver(() => recalcPosition())
-
-  //   observer.observe(listRef.current)
-
-  //   return () => observer.disconnect()
-  // }, [recalcPosition])
-
-  // useEffect(() => {
-  //   window.addEventListener('resize', recalcPosition)
-  //   return () => window.removeEventListener('resize', recalcPosition)
-  // }, [recalcPosition])
-
-  return isToMove
+  return isTransfer
 }

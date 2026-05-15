@@ -40,7 +40,12 @@ const Emblem = styled.img`
 
 const pathWithBasename = `/find-player-game${routerPath.SUBMISSION}`
 
-const Club = ({ logo, name, id }: IFirebaseTeamDetail) => {
+const Club = ({
+  logo,
+  name,
+  id,
+  offTablet,
+}: IFirebaseTeamDetail & { offTablet: () => void }) => {
   const queryClient = useQueryClient()
   const [isHover, setIsHover] = useState(false)
   const [clicked, setClicked] = useState(false)
@@ -60,6 +65,7 @@ const Club = ({ logo, name, id }: IFirebaseTeamDetail) => {
   const offModal = () => {
     setIsHover(false)
     setClicked(true)
+    offTablet()
   }
 
   useEffect(() => {

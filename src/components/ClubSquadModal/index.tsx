@@ -3,7 +3,6 @@ import { memo, useRef } from 'react'
 import { useFetchingTeamPlayersData } from '../../hooks/useFetchingTeamPlayers'
 import { Loader, Name, PlayerList, PlayerRow } from './style'
 import { useModalPosition, useSelectPlayer } from './hook'
-import ProfileComp from '../Profiler'
 
 interface IClubSquadModalProps {
   teamId: number
@@ -26,13 +25,18 @@ const ClubSquadModal = ({
   } = useFetchingTeamPlayersData(teamId)
   const listRef = useRef<HTMLUListElement>(null)
 
-  const isToMove = useModalPosition(listRef, parentRef, teamId)
+  const isTransfer = useModalPosition({
+    listRef,
+    parentRef,
+    triggerKey: teamId,
+  })
 
   const handleClick = useSelectPlayer(offModal)
 
   return (
-    <ProfileComp id={`ClubSquadModal-${teamId}`}>
-      <PlayerList ref={listRef} $isToMove={isToMove}>
+    <>
+      {/* <ProfileComp id={`ClubSquadModal-${teamId}`}> */}
+      <PlayerList ref={listRef} $isTransfer={isTransfer}>
         {isPending ? (
           <Message message='Loading...' />
         ) : error || !players?.length ? (
@@ -47,7 +51,8 @@ const ClubSquadModal = ({
           ))
         )}
       </PlayerList>
-    </ProfileComp>
+      {/* </ProfileComp> */}
+    </>
   )
 }
 

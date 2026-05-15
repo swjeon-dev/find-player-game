@@ -1,10 +1,11 @@
+import { useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import styled, { css } from 'styled-components'
 
+import useBreakpoint from '@/hooks/useBreakpoint'
 import { leagueInfoState } from '@/state'
 import { SkeletonBase } from '@/utils/skeletonUI'
 import Club from './Club'
-import ProfileComp from './Profiler'
 import useFetchingTeamsDataInLeague from '../hooks/useFetchingTeamsDataInLeague'
 
 const ErrorBox = styled.div`
@@ -42,6 +43,23 @@ const ClubSkeleton = styled(SkeletonBase)`
   margin: auto;
 `
 
+/** 태블릿에서만 렌더: 팀 그리드 패널 열기/닫기 */
+const TabletToggleButton = styled.button`
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 101;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  background: #023047;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+`
+
 interface IClubContainer {
   $isLoading: boolean
 }
@@ -74,7 +92,12 @@ const ClubContainer = styled.div<IClubContainer>`
   z-index: 31;
 
   ${props => props.theme.media.tablet} {
-    display: none;
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    height: fit-content;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 100;
   }
 `
 
@@ -104,6 +127,15 @@ const ClubViews = () => {
   const { teamIdsQuery, teamDatasQuery } = useFetchingTeamsDataInLeague(
     leagueInfo.id,
   )
+  const { isAtMost } = useBreakpoint()
+  const isTablet = isAtMost('tablet')
+  const [isTabletOpen, setIsTabletOpen] = useState(false)
+
+  useEffect(() => {
+    if (!isTablet) {
+      setIsTabletOpen(false)
+    }
+  }, [isTablet])
 
   if (teamIdsQuery.error) {
     return (
@@ -118,27 +150,41 @@ const ClubViews = () => {
   const isInitialLoading = teamIdsQuery.isPending
   const isAnyTeamLoading = teamDatasQuery.some(q => q.isPending)
 
+  const showClubGrid = !isTablet || isTabletOpen
+
+  const closeTablet = () => setIsTabletOpen(v => !v)
+
   return (
     <>
-      {/* <ProfileComp id='ClubViews'> */}
-      <ClubContainer $isLoading={isInitialLoading || isAnyTeamLoading}>
-        {isInitialLoading
-          ? Array.from({ length: 12 }).map((_, idx) => (
-              <ClubSkeleton key={idx} />
-            ))
-          : teamDatasQuery.map((q, idx) =>
-              // <>
-              //   <ProfileComp key={q.data.id} id={`Club-${q.data.id}`}>
-              //   </ProfileComp>
-              //   </>
-              q.data ? (
-                <Club key={`club-${q.data.id}`} {...q.data} />
-              ) : (
+      {isTablet && (
+        <TabletToggleButton
+          type='button'
+          aria-expanded={isTabletOpen}
+          onClick={closeTablet}
+        >
+          {isTabletOpen ? '팀 목록 닫기' : '팀 목록 열기'}
+        </TabletToggleButton>
+      )}
+
+      {showClubGrid && (
+        <ClubContainer $isLoading={isInitialLoading || isAnyTeamLoading}>
+          {isInitialLoading
+            ? Array.from({ length: 12 }).map((_, idx) => (
                 <ClubSkeleton key={idx} />
-              ),
-            )}
-      </ClubContainer>
-      {/* </ProfileComp> */}
+              ))
+            : teamDatasQuery.map((q, idx) =>
+                q.data ? (
+                  <Club
+                    key={`club-${q.data.id}`}
+                    {...q.data}
+                    offTablet={closeTablet}
+                  />
+                ) : (
+                  <ClubSkeleton key={idx} />
+                ),
+              )}
+        </ClubContainer>
+      )}
     </>
   )
 }

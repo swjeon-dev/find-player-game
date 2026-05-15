@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 
-export const PlayerList = styled.ul<{ $isToMove: boolean }>`
+export const PlayerList = styled.ul<{
+  $isTransfer: { y: boolean; x: boolean }
+}>`
   position: absolute;
   top: 0;
   left: 100%;
@@ -14,7 +16,25 @@ export const PlayerList = styled.ul<{ $isToMove: boolean }>`
   border-radius: 5px;
   overflow-y: auto;
 
-  transform: ${props => (props.$isToMove ? 'translateY(-80%)' : 'none')};
+  transform: ${props => {
+    const { x, y } = props.$isTransfer
+    const parts: string[] = []
+    if (x) parts.push('translateX(-80%)')
+    if (y) parts.push('translateY(-80%)')
+    return parts.length > 0 ? parts.join(' ') : 'none'
+  }};
+
+  animation: ${props =>
+    props.$isTransfer ? 'slide-in 0.3s ease-in-out' : 'none'};
+
+  @keyframes slide-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 `
 export const PlayerRow = styled.li`
   line-height: 30px;
