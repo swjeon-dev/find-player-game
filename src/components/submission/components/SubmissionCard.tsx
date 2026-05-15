@@ -8,21 +8,35 @@ import useSubmissionGame from '../hooks/useSubmissionGame'
 import { FormContainer, Photo, PhotoSkeleton } from './SubmissionCard.styles'
 
 interface SubmissionCardProps {
-  isPending: boolean
+  isGeneratingQuiz: boolean
+  isChangingQuiz: boolean
   generateQuiz: () => void
 }
 
-const SubmissionCard = ({ isPending, generateQuiz }: SubmissionCardProps) => {
+const SubmissionCard = ({
+  isGeneratingQuiz,
+  isChangingQuiz,
+  generateQuiz,
+}: SubmissionCardProps) => {
   const quiz = useRecoilValue(quizState)
   const { hintArr, isCorrect, setIsCorrect, setHintArr, changeQuiz } =
     useSubmissionGame({ generateQuiz })
 
-  const isDisabled = isPending || isCorrect
+  const isDisabled = isGeneratingQuiz || isChangingQuiz || isCorrect
+  /** 첫 로드 등 아직 사진이 없을 때만 스켈레톤. 선수 변경 시에는 이전 사진 유지 + 페치 애니메이션 */
+  const showPhotoSkeleton = !quiz?.photo
+  /** 새 query 펜딩이어도 quiz가 남아 있으면 스켈레톤 대신 페치 애니메이션 */
+  const showFetchAnimation =
+    isChangingQuiz || (isGeneratingQuiz && Boolean(quiz?.photo))
 
   return (
     <>
-      <FormContainer $isPending={isPending} role='submission-card'>
-        {isPending ? (
+      <FormContainer
+        $isPending={isGeneratingQuiz}
+        $isChanging={showFetchAnimation}
+        role='submission-card'
+      >
+        {showPhotoSkeleton ? (
           <PhotoSkeleton />
         ) : (
           <Photo
@@ -31,6 +45,7 @@ const SubmissionCard = ({ isPending, generateQuiz }: SubmissionCardProps) => {
             src={quiz?.photo}
             alt={quiz?.name ?? 'quiz-player'}
             $isCorrect={isCorrect}
+            $isChanging={showFetchAnimation}
             width='160'
             height='180'
           />

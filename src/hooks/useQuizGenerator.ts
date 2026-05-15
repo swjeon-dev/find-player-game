@@ -32,7 +32,9 @@ function pickNextQuizPlayerId(
 const useQuizGenerator = (): {
   generateQuiz: () => void
   isGeneratingQuiz: boolean
+  isChangingQuiz: boolean
   quizError: Error | null
+  refetchQuiz: () => void
 } => {
   const leagueInfo = useRecoilValue(leagueInfoState)
   const [quiz, setQuiz] = useRecoilState(quizState)
@@ -47,7 +49,9 @@ const useQuizGenerator = (): {
 
   const {
     isPending: isGeneratingQuiz,
+    isFetching: isChangingQuiz,
     error: quizError,
+    refetch: refetchQuiz,
     player,
   } = useFetchingPlayerData({
     playerId: pickedPlayerId ?? 0,
@@ -86,7 +90,13 @@ const useQuizGenerator = (): {
     if (next != null) setPickedPlayerId(next)
   }, [playersId, quiz?.id])
 
-  return { generateQuiz, isGeneratingQuiz, quizError }
+  return {
+    generateQuiz,
+    isGeneratingQuiz,
+    isChangingQuiz,
+    quizError,
+    refetchQuiz,
+  }
 }
 
 export default useQuizGenerator

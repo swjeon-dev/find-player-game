@@ -13,6 +13,7 @@ export default function useFetchingPlayerData({
 }) {
   const {
     isPending,
+    isFetching,
     error,
     data: player,
     refetch,
@@ -22,5 +23,5 @@ export default function useFetchingPlayerData({
     enabled,
   })
 
-  return { isPending, error, player, refetch }
+  return { isPending, isFetching, error, player, refetch }
 }

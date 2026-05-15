@@ -2,7 +2,10 @@ import styled from 'styled-components'
 
 import { SkeletonBase } from '@/utils/skeletonUI'
 
-export const FormContainer = styled.div<{ $isPending: boolean }>`
+export const FormContainer = styled.div<{
+  $isPending: boolean
+  $isChanging?: boolean
+}>`
   position: relative;
   width: 100%;
   height: 280px;
@@ -17,7 +20,12 @@ export const FormContainer = styled.div<{ $isPending: boolean }>`
   border-radius: 15px;
   padding-bottom: 15px;
 
-  opacity: ${props => (props.$isPending ? '0.8' : '1')};
+  opacity: ${props => {
+    if (props.$isPending) return '0.8'
+    if (props.$isChanging) return '0.92'
+    return '1'
+  }};
+  transition: opacity 0.2s ease;
   z-index: 10;
 
   ${({ theme }) => theme.media.mobile} {
@@ -33,7 +41,10 @@ export const PhotoSkeleton = styled(SkeletonBase)`
   margin-bottom: 20px;
 `
 
-export const Photo = styled.img<{ $isCorrect: boolean }>`
+export const Photo = styled.img<{
+  $isCorrect: boolean
+  $isChanging?: boolean
+}>`
   width: 160px;
   height: 180px;
   border-radius: 20px;
@@ -41,7 +52,10 @@ export const Photo = styled.img<{ $isCorrect: boolean }>`
   margin-bottom: 20px;
   ${props => (props.$isCorrect ? null : 'filter: blur(13px)')};
 
-  animation: showing-image 0.3s ease-out forwards;
+  animation: ${props =>
+    props.$isChanging
+      ? 'quiz-fetching 0.9s ease-in-out infinite'
+      : 'showing-image 0.3s ease-out forwards'};
 
   @keyframes showing-image {
     0% {
@@ -51,6 +65,18 @@ export const Photo = styled.img<{ $isCorrect: boolean }>`
     100% {
       opacity: 1;
       transform: translateX(0);
+    }
+  }
+
+  @keyframes quiz-fetching {
+    0%,
+    100% {
+      opacity: 0.88;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(0.985);
     }
   }
 `

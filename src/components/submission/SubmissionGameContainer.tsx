@@ -7,14 +7,20 @@ import { Container } from './styles'
 import ProfileComp from '../Profiler'
 
 export default function SubmissionGameContainer() {
-  const { generateQuiz, isGeneratingQuiz, quizError } = useQuizGenerator()
+  const {
+    generateQuiz,
+    isGeneratingQuiz,
+    isChangingQuiz,
+    quizError,
+    refetchQuiz,
+  } = useQuizGenerator()
 
   useEffect(() => {
     generateQuiz()
   }, [])
 
   const retryFetching = () => {
-    generateQuiz()
+    refetchQuiz()
   }
 
   if (quizError) {
@@ -30,7 +36,8 @@ export default function SubmissionGameContainer() {
     <Container>
       {/* <ProfileComp id='SubmissionGameContainer'> */}
       <SubmissionCard
-        isPending={isGeneratingQuiz}
+        isGeneratingQuiz={isGeneratingQuiz}
+        isChangingQuiz={isChangingQuiz}
         generateQuiz={generateQuiz}
       />
       {/* </ProfileComp> */}
