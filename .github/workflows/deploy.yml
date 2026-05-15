@@ -42,13 +42,15 @@ jobs:
           # 1. 루트 의존성 설치
           npm ci
 
-          # 2. shared 폴더를 functions/src 내부로 물리적 복사 (상대 경로 해결)
-          # 에러 로그의 '../shared' 참조를 위해 src 하위에 둡니다.
-          rm -rf functions/src/shared
-          cp -r shared functions/src/shared
-
-          # 디버깅: 복사된 경로 확인
-          ls -R functions/src/shared
+          # 2. shared 폴더가 저장소에 있을 때만 functions/src 로 복사
+          # (원격에 shared/ 가 없으면 cp 실패로 배포가 중단되므로 분기 처리)
+          if [ -d shared ]; then
+            rm -rf functions/src/shared
+            cp -r shared functions/src/shared
+            ls -R functions/src/shared
+          else
+            echo 'shared/ 가 없어 복사를 건너뜁니다. functions 빌드에 shared가 필요하면 해당 디렉터리를 커밋하세요.'
+          fi
 
           # 3. functions 의존성 설치
           cd functions && npm install
