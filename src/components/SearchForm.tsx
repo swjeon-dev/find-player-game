@@ -46,6 +46,10 @@ const Input = styled.input`
   &::placeholder {
     color: #979dac;
   }
+  &:disabled {
+    background-color: rgba(195, 195, 195, 0.5);
+    cursor: not-allowed;
+  }
 `
 
 function useAutocompleteListFocus(value: string) {
