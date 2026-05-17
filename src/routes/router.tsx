@@ -1,9 +1,21 @@
+import { lazy, Suspense } from 'react'
 import { createBrowserRouter } from 'react-router-dom'
-import Submission from '../pages/Submission'
-import RootLayout from '../components/layout/RootLayout'
-import routerPath from '../constant/routerPath'
-import { Cover } from '@/pages/Cover'
+import styled from 'styled-components'
+
+import RootLayout from '@/components/layout/RootLayout'
 import ProtectedRoute from '@/components/ProtectedRoute'
+import { Cover } from '@/pages/Cover'
+import routerPath from '@/constant/routerPath'
+import { SkeletonBase } from '@/utils/skeletonUI'
+
+const Submission = lazy(() => import('@/pages/Submission'))
+
+const RouteFallback = styled(SkeletonBase)`
+  width: 100%;
+  min-height: 240px;
+  border-radius: 12px;
+  margin: 24px 0;
+`
 
 const routes = [
   {
@@ -20,7 +32,11 @@ const routes = [
         children: [
           {
             index: true,
-            element: <Submission />,
+            element: (
+              <Suspense fallback={<RouteFallback aria-label='퀴즈 화면 로딩' />}>
+                <Submission />
+              </Suspense>
+            ),
           },
         ],
       },

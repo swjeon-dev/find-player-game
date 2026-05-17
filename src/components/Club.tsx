@@ -1,10 +1,11 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { memo, useEffect, useRef, useState } from 'react'
+import { lazy, memo, Suspense, useEffect, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import routerPath from '@/constant/routerPath'
 import { prefetchTeamPlayersId } from '@/hooks/useFetchingTeamPlayers'
-import ClubSquadModal from './ClubSquadModal'
+
+const ClubSquadModal = lazy(() => import('./ClubSquadModal'))
 import type { IFirebaseTeamDetail } from '../types'
 import useDebouncedValue from '../hooks/useDebouncedValue'
 import ProfileComp from './Profiler'
@@ -57,6 +58,7 @@ const Club = ({
   const handleMouseEnter = () => {
     if (clicked) return
     setIsHover(true)
+    import('./ClubSquadModal')
   }
   const handleMouseLeave = () => {
     setClicked(false)
@@ -83,15 +85,13 @@ const Club = ({
       >
         <Emblem src={logo} alt={name} ref={parentRef} width='60' height='60' />
         {activeModal && onLazyModal && isHover && (
-          <>
-            {/* <ProfileComp id={`ClubSquadModal-${id}`}> */}
+          <Suspense fallback={null}>
             <ClubSquadModal
               teamId={id}
               parentRef={parentRef}
               offModal={offModal}
             />
-            {/* </ProfileComp> */}
-          </>
+          </Suspense>
         )}
       </Container>
       {/* </ProfileComp> */}
