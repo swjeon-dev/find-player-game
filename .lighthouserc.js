@@ -10,7 +10,8 @@ module.exports = {
         'http://127.0.0.1:4173/find-player-game/',
         'http://127.0.0.1:4173/find-player-game/submission',
       ],
-      numberOfRuns: 3,
+      // CI(GitHub Actions)에서는 1회, 로컬은 3회
+      numberOfRuns: process.env.GITHUB_ACTIONS === 'true' ? 1 : 3,
       settings: {
         chromeFlags:
           '--headless=new --disable-dev-shm-usage --no-sandbox --disable-gpu',
