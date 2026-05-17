@@ -1,16 +1,20 @@
 module.exports = {
   ci: {
     collect: {
-      // preview 전에 dist 필요. VITE_LHCI 는 반드시 build 할 때 넣어야 번들에 반영됩니다.
+      // build는 npm run lhci 에서 먼저 실행합니다. preview만 띄워 포트·준비 시점을 안정화합니다.
       startServerCommand:
-        'VITE_LHCI=true npm run build && npm run preview -- --host 127.0.0.1 --port 4173 --strictPort',
-      startServerReadyPattern: 'http://127.0.0.1:4173',
+        'npm run preview -- --host 127.0.0.1 --port 4173 --strictPort',
+      startServerReadyPattern: 'Local:',
+      startServerReadyTimeout: 120000,
       url: [
         'http://127.0.0.1:4173/find-player-game/',
         'http://127.0.0.1:4173/find-player-game/submission',
       ],
-      // numberOfRuns: 5,
       numberOfRuns: 3,
+      settings: {
+        chromeFlags:
+          '--headless=new --disable-dev-shm-usage --no-sandbox --disable-gpu',
+      },
     },
     upload: {
       target: 'temporary-public-storage',
