@@ -127,7 +127,7 @@ const ClubViews = () => {
   const { teamIdsQuery, teamDatasQuery } = useFetchingTeamsDataInLeague(
     leagueInfo.id,
   )
-  const { isAtMost } = useBreakpoint()
+  const { isAtMost, isVirtualKeyboardOpen } = useBreakpoint()
   const isTablet = isAtMost('tablet')
   const [isTabletOpen, setIsTabletOpen] = useState(false)
 
@@ -136,6 +136,12 @@ const ClubViews = () => {
       setIsTabletOpen(false)
     }
   }, [isTablet])
+
+  useEffect(() => {
+    if (isVirtualKeyboardOpen) {
+      setIsTabletOpen(false)
+    }
+  }, [isVirtualKeyboardOpen])
 
   if (teamIdsQuery.error) {
     return (
@@ -154,9 +160,11 @@ const ClubViews = () => {
 
   const closeTablet = () => setIsTabletOpen(v => !v)
 
+  const showTabletToggle = isTablet && !isVirtualKeyboardOpen
+
   return (
     <>
-      {isTablet && (
+      {showTabletToggle && (
         <TabletToggleButton
           type='button'
           aria-expanded={isTabletOpen}
