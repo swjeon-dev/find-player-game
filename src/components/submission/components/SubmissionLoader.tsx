@@ -45,7 +45,8 @@ export const SubmissionLoader = ({
   onRetry,
 }: SubmissionLoaderProps) => {
   return (
-    <LoadingWrapper>
+    // 해당 컴포넌트는 퀴즈가 나오기전 오류가 발생할 때 노출되는 컴포넌트이므로 alert 역할을 합니다.
+    <LoadingWrapper role='alert'>
       <div>
         <span>{message}</span>
         {onRetry ? (

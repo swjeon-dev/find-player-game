@@ -33,7 +33,7 @@ export default function SubmissionGameContainer() {
   }
 
   return (
-    <Container>
+    <Container role='quiz-container'>
       {/* <ProfileComp id='SubmissionGameContainer'> */}
       <SubmissionCard
         isGeneratingQuiz={isGeneratingQuiz}

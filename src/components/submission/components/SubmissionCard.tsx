@@ -30,7 +30,7 @@ const SubmissionCard = ({
     isChangingQuiz || (isGeneratingQuiz && Boolean(quiz?.photo))
 
   return (
-    <>
+    <div role='submission-card'>
       <FormContainer
         $isPending={isGeneratingQuiz}
         $isChanging={showFetchAnimation}
@@ -61,7 +61,7 @@ const SubmissionCard = ({
 
       <HintBox hintArr={hintArr} />
       <ChangeButton onClick={changeQuiz} />
-    </>
+    </div>
   )
 }
 
