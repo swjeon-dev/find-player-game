@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import styled, { css } from 'styled-components'
 
@@ -155,10 +155,11 @@ const ClubViews = () => {
   }
   const isInitialLoading = teamIdsQuery.isPending
   const isAnyTeamLoading = teamDatasQuery.some(q => q.isPending)
+  const teamIds = teamIdsQuery.data ?? []
 
   const showClubGrid = !isTablet || isTabletOpen
 
-  const closeTablet = () => setIsTabletOpen(v => !v)
+  const closeTablet = useCallback(() => setIsTabletOpen(prev => !prev), [])
 
   const showTabletToggle = isTablet && !isVirtualKeyboardOpen
 
@@ -178,19 +179,18 @@ const ClubViews = () => {
         <ClubContainer $isLoading={isInitialLoading || isAnyTeamLoading}>
           {isInitialLoading
             ? Array.from({ length: 12 }).map((_, idx) => (
-                <ClubSkeleton key={idx} />
+                // teamIds 미수신 — placeholder key만 사용 (로드 후 전체 교체)
+                <ClubSkeleton key={`skeleton-placeholder-${idx}`} />
               ))
-            : teamDatasQuery.map((q, idx) =>
-                q.data ? (
-                  <Club
-                    key={`club-${q.data.id}`}
-                    {...q.data}
-                    offTablet={closeTablet}
-                  />
-                ) : (
-                  <ClubSkeleton key={idx} />
-                ),
-              )}
+            : teamIds.map((teamId, idx) => {
+                const q = teamDatasQuery[idx]
+                if (q?.data) {
+                  return (
+                    <Club key={teamId} {...q.data} offTablet={closeTablet} />
+                  )
+                }
+                return <ClubSkeleton key={`skeleton-${teamId}`} />
+              })}
         </ClubContainer>
       )}
     </>
