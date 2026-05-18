@@ -11,7 +11,7 @@ interface IClubSquadModalProps {
 }
 
 // 클럽의 등록된 선수를 보여주는 Modal
-// TODO: 선수 목록 조회 실패 시 처리 + 선수 목록을 전체 말고 일부만 조금씩 출력
+
 const ClubSquadModal = ({
   teamId,
   parentRef,

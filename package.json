@@ -21,7 +21,8 @@
     "build": "tsc -b && vite build",
     "build:analyze": "ANALYZE=true npm run build",
     "preview": "vite preview",
-    "lhci": "VITE_LHCI=true npm run build && npx lhci autorun",
+    "lhci": "npx lhci autorun",
+    "lhci:local": "VITE_LHCI=true npm run build && npm run lhci",
     "sync:lighthouse-readme": "node scripts/sync-lighthouse-readme.mjs"
   },
   "browserslist": {
