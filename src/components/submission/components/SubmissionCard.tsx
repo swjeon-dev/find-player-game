@@ -1,7 +1,7 @@
 import { useRecoilValue } from 'recoil'
 
-import SearchForm from '@/components/SearchForm'
-import HintBox from '@/components/HintBox'
+import SearchForm from '@/components/search/SearchForm'
+import HintBox from '@/components/search/HintBox'
 import { quizState } from '@/state'
 import ChangeButton from './ChangeButton'
 import useSubmissionGame from '../hooks/useSubmissionGame'

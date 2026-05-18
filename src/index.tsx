@@ -5,10 +5,10 @@ import { RecoilRoot } from 'recoil'
 import { HelmetProvider } from 'react-helmet-async'
 import { QueryClientProvider } from '@tanstack/react-query'
 
-import BrowserRouter from './BrowserRouter'
-import { theme } from './styles/theme'
-import { queryClient } from './lib/queryClient'
-import { setupQueryPersist } from './lib/persistClient'
+import BrowserRouter from '@/app/BrowserRouter'
+import { theme } from '@/styles/theme'
+import { queryClient } from '@/lib/queryClient'
+import { setupQueryPersist } from '@/lib/persistClient'
 
 setupQueryPersist()
 

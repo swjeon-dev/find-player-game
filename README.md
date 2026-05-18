@@ -189,7 +189,9 @@ Vite + TypeScript 환경으로 마이그레이션했습니다.
 3. README의 아래 표가 `.lighthouseci/lhr-*.json` 기준으로 갱신됩니다. 확인 후 커밋합니다.
 
 <!-- LIGHTHOUSE_SCORES_START -->
+
 _(아직 측정하지 않았다면 1번을 실행한 뒤 2번을 실행합니다.)_
+
 <!-- LIGHTHOUSE_SCORES_END -->
 
 ## 9. 개선 방향
@@ -216,3 +218,93 @@ npm run dev
 - bundleSize
 - Webpack Bundle Analyzer
 - PageSpeed: [PageSpeed Insights](https://pagespeed.web.dev/)
+
+# 리팩토링
+
+## 코드 구조 변경
+
+```text
+src/
+├── app/                          # 앱 셸 (라우팅 진입)
+│   ├── BrowserRouter.tsx         # (이동) src/BrowserRouter.tsx
+│   └── router.tsx                # (이동) src/routes/router.tsx
+│
+├── pages/
+│   ├── cover/
+│   │   └── Cover.tsx
+│   └── submission/
+│       └── Submission.tsx
+│
+├── components/
+│   ├── layout/                   # 유지
+│   │   └── RootLayout.tsx
+│   ├── shared/                   # 여러 화면 공통
+│   │   ├── Header.tsx
+│   │   ├── ProtectedRoute.tsx
+│   │   └── Profiler.tsx
+│   ├── cover/
+│   │   └── LeagueSelectModal.tsx
+│   ├── club/
+│   │   ├── Club.tsx
+│   │   ├── ClubViews.tsx
+│   │   └── club-squad-modal/
+│   │       ├── index.tsx
+│   │       ├── style.ts
+│   │       └── hooks/
+│   │           └── useClubSquadModal.ts   # (이동) hook.ts — 파일명만 경로 정리 시 변경
+│   ├── search/
+│   │   ├── SearchForm.tsx
+│   │   ├── AutoSearch.tsx
+│   │   └── HintBox.tsx
+│   └── submission/               # 기존 submission 트리 유지·정리
+│       ├── SubmissionGameContainer.tsx
+│       ├── styles.ts
+│       ├── components/
+│       │   ├── ChangeButton.tsx
+│       │   ├── SubmissionCard.tsx
+│       │   ├── SubmissionCard.styles.ts
+│       │   └── SubmissionLoader.tsx
+│       └── hooks/
+│           └── useSubmissionGame.ts
+│
+├── hooks/
+│   ├── ui/
+│   │   ├── useBreakpoint.ts
+│   │   └── useDebouncedValue.ts
+│   ├── data/                     # Firebase/React Query fetch
+│   │   ├── useFetchingPlayerData.ts
+│   │   ├── useFetchingPlayersDataInLeague.ts
+│   │   ├── useFetchingPlayersIdInLeague.ts
+│   │   ├── useFetchingTeamData.ts
+│   │   ├── useFetchingTeamPlayers.ts
+│   │   └── useFetchingTeamsDataInLeague.ts
+│   └── quiz/
+│       ├── useQuizGenerator.ts
+│       └── useFilteringPlayersName.ts
+│
+├── api/          # (변경 없음)
+├── state/
+├── lib/
+├── services/
+├── constant/
+├── styles/
+├── types/
+└── utils/
+```
+
+```text
+src/
+├── app/          # 앱 진입 및 URL 매핑 (UI, 데이터 로직 없음)
+├── pages/        # 페이지 컴포넌트
+├── lib/          # 인프라 및 공통 클라이언트 설정
+├── services/     # API (데이터 조회 로직)
+├── types/        # 타입 정의 (.types.ts)
+├── state/        # 전역 상태
+├── constant/     # 상수, 고정값
+├── styles/       # 전역 스타일 및 테마
+└── utils/        # helper
+```
+
+<!-- TODO: 파일 구조 변경 -->
+<!-- TODO: 자동 완성 검색을 위한 선수 전체 데이터 검색 -> id 프리페칭 + query 조회 + 모달 조회 방식 변경으로 렌더링 속도 확인-->
+<!-- TODO: Clubviews useQuery -> useQueries 조회 변경 -->

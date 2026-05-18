@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
 
-import useQuizGenerator from '@/hooks/useQuizGenerator'
+import useQuizGenerator from '@/hooks/quiz/useQuizGenerator'
 import SubmissionCard from './components/SubmissionCard'
 import { SubmissionLoader } from './components/SubmissionLoader'
 import { Container } from './styles'
-import ProfileComp from '../Profiler'
+import ProfileComp from '../layout/Profiler'
 
 export default function SubmissionGameContainer() {
   const {
