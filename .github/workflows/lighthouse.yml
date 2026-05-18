@@ -41,6 +41,8 @@ jobs:
 
       - name: Verify Lighthouse GitHub App token
         if: github.event_name == 'pull_request'
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
         run: |
           if [ -z "$LHCI_GITHUB_APP_TOKEN" ]; then
             echo "::error::LHCI_GITHUB_APP_TOKEN secret이 없습니다."
