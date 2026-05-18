@@ -23,11 +23,15 @@ function RootLayout() {
       <Helmet>
         <title>Find Football Player</title>
       </Helmet>
-      <Header />
       <GlobalStyle />
-      <Container>
-        <Outlet />
-      </Container>
+      <header>
+        <Header />
+      </header>
+      <main id='main-content'>
+        <Container>
+          <Outlet />
+        </Container>
+      </main>
     </>
   )
 }

@@ -27,15 +27,28 @@ const Text = styled.span`
   text-align: center;
   padding: 5px 10px;
   font-weight: bold;
-  color: red;
-  & span {
-    color: black;
-    font-weight: bold;
-  }
+`
+
+const OriginalLabel = styled.span`
+  color: #000000;
+  font-weight: bold;
 `
 const ReferenceLink = styled.a`
-  color: red;
+  color: #001d3d;
   font-weight: bold;
+  text-decoration: underline;
+
+  &:hover {
+    opacity: 0.85;
+  }
+`
+
+const TitleHeading = styled.h1`
+  margin: 0;
+  padding: 10px 0;
+  font-size: inherit;
+  font-weight: inherit;
+  text-align: center;
 `
 
 const HomeLink = styled(Link)<{ $isTablet: boolean }>`
@@ -52,12 +65,14 @@ const Header = () => {
 
   return (
     <Container>
-      <HomeLink to='/' $isTablet={isTablet}>
-        Find Football Player
-      </HomeLink>
+      <TitleHeading>
+        <HomeLink to='/' $isTablet={isTablet}>
+          Find Football Player
+        </HomeLink>
+      </TitleHeading>
       <SubContainer>
         <Text>
-          <span>original: </span>
+          <OriginalLabel>original: </OriginalLabel>
           <ReferenceLink
             href='https://playfootball.games/who-are-ya/big-4/'
             target='_blank'
