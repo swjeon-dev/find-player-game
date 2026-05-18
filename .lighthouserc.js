@@ -19,6 +19,25 @@ module.exports = {
     },
     upload: {
       target: 'temporary-public-storage',
+      // target: 'filesystem',
+      // outputDir: './lighthouse-results',
+      // outputFilenamePrefix: 'lighthouse-results',
+      // 각 보고서 파일 이름 규칙을 지정합니다.
+      // reportFilenamePattern: '%%PATHNAME%%-%%DATETIME%%-report.%%EXTENSION%%',
+    },
+    assert: {
+      assertions: {
+        'first-contentful-paint': ['warn', { minScore: 0.7 }],
+        'largest-contentful-paint': ['warn', { minScore: 0.8 }],
+        'speed-index': ['warn', { minScore: 0.8 }],
+        'time-to-interactive': ['warn', { minScore: 0.8 }],
+        'total-blocking-time': ['warn', { minScore: 0.8 }],
+        'cumulative-layout-shift': ['warn', { minScore: 0.8 }],
+        // 'categories:performance': ['warn', { minScore: 0.9 }],
+        // 'categories:accessibility': ['warn', { minScore: 0.9 }],
+        // 'categories:best-practices': ['warn', { minScore: 0.9 }],
+        // 'categories:seo': ['warn', { minScore: 0.9 }],
+      },
     },
   },
 }
