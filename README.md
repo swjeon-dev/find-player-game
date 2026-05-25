@@ -305,6 +305,6 @@ src/
 └── utils/        # helper
 ```
 
-<!-- TODO: 파일 구조 변경 -->
-<!-- TODO: 자동 완성 검색을 위한 선수 전체 데이터 검색 -> id 프리페칭 + query 조회 + 모달 조회 방식 변경으로 렌더링 속도 확인-->
-<!-- TODO: Clubviews useQuery -> useQueries 조회 변경 -->
+<!-- [v] TODO: 파일 구조 변경 -->
+<!-- [ ] TODO: 자동 완성 검색을 위한 선수 전체 데이터 검색 -> id 프리페칭 + query 조회 + 모달 조회 방식 변경으로 렌더링 속도 확인-->
+<!-- [v] TODO: Clubviews useQuery -> useQueries 조회 변경 -->
