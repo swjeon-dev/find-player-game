@@ -46,8 +46,10 @@ const routes = [
   },
 ]
 
+const basename = import.meta.env.BASE_URL.replace(/\/$/, '') || '/'
+
 const router = createBrowserRouter(routes, {
-  basename: import.meta.env.DEV ? '/' : '/find-player-game',
+  basename,
 })
 
 export default router

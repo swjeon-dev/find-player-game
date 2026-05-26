@@ -4,8 +4,9 @@ import { visualizer } from 'rollup-plugin-visualizer'
 import * as path from 'path'
 
 const analyze = process.env.ANALYZE === 'true'
+const base = process.env.VITE_PUBLIC_BASE || '/'
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [
     react(),
     analyze &&
@@ -16,7 +17,8 @@ export default defineConfig({
         brotliSize: true,
       }),
   ].filter(Boolean),
-  base: '/find-player-game',
+  // 로컬 개발/빌드에서는 '/', GitHub Pages 배포 빌드에서만 env로 override 합니다.
+  base,
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -33,4 +35,4 @@ export default defineConfig({
       },
     },
   },
-})
+}))
