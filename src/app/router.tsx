@@ -7,6 +7,7 @@ import ProtectedRoute from '@/components/layout/ProtectedRoute'
 import { Cover } from '@/pages/cover/Cover'
 import routerPath from '@/constant/routerPath'
 import { SkeletonBase } from '@/utils/skeletonUI'
+import NotFound from '@/pages/not-found/NotFound'
 
 const Submission = lazy(() => import('@/pages/submission/Submission'))
 
@@ -41,6 +42,10 @@ const routes = [
             ),
           },
         ],
+      },
+      {
+        path: '*',
+        element: <NotFound />,
       },
     ],
   },
