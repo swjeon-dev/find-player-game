@@ -1,310 +1,84 @@
 # ⚽ Find Football Player Quiz
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://software92.github.io/find-player-game/)
-![Deploy Status](https://img.shields.io/github/actions/workflow/status/software92/find-player-game/deploy.yml?branch=master&style=flat-square&label=Deploy&logo=GitHub%20Actions&logoColor=white)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://swjeon-dev.github.io/find-player-game/) ![Deploy Status](https://img.shields.io/github/actions/workflow/status/swjeon-dev/find-player-game/deploy.yml?branch=master&style=flat-square&label=Deploy&logo=GitHub%20Actions&logoColor=white)
 
-외부 API Rate Limit 문제를 해결하기 위해 서버리스 구조로 개선한 퀴즈형 웹 서비스입니다.  
-블러 처리된 프리미어리그 선수 이미지를 보고 정답을 맞추는 과정에서 자동완성, 힌트, 상태 기반 UI를 제공합니다.
+외부 API Rate Limit 문제를 해결하기 위해 **Firebase 기반 서버리스 구조**로 개선한 축구 선수 퀴즈 서비스입니다.  
+블러 처리된 프리미어리그 선수 이미지를 보고 정답을 맞추는 과정에서 **자동완성, 힌트, 상태 기반 UI, 캐싱된 데이터 흐름**을 제공합니다.
 
----
+## 한 줄 소개
 
-## 서비스 화면
+**외부 API 직접 의존 구조를 서버리스 구조로 전환하고, 검색 제약을 UX 설계로 풀어낸 축구 선수 퀴즈 웹 서비스**입니다.
 
-|                 Loading                  |                         Entry                          |                       자동완성                       |
-| :--------------------------------------: | :----------------------------------------------------: | :--------------------------------------------------: |
-| ![loading](src/assets/imgs/loading.webp) | ![main-interface](src/assets/imgs/main-interface.webp) | ![auto-complete](src/assets/imgs/auto-complete.webp) |
+## Demo
 
-|                 힌트                 |                  정답                  |
-| :----------------------------------: | :------------------------------------: |
-| ![hints](src/assets/imgs/hints.webp) | ![result](src/assets/imgs/result.webp) |
+- [Live Demo](https://swjeon-dev.github.io/find-player-game/)
+- [시연 영상 보기](https://github.com/user-attachments/assets/37036cd6-3ea5-42fa-837c-c987919557b6)
 
----
+[![Quiz Demo Thumbnail](src/assets/imgs/auto-complete.webp)](https://github.com/user-attachments/assets/37036cd6-3ea5-42fa-837c-c987919557b6)
 
-## 1. 프로젝트 소개
+## 핵심 문제와 해결
 
-- 블러 처리된 프리미어리그 선수 이미지를 보고 정답을 맞추는 퀴즈 게임
-- 자동완성과 힌트 기반 인터랙션으로 사용자 진입 장벽 완화
-- 외부 API 직접 의존 구조를 서버리스로 전환해 안정성·가용성 개선
-- 데이터 요청 구조 개선과 사용자 입력 흐름 최적화에 초점을 둔 개발
+### 1. 외부 API Rate Limit
 
----
-
-## 2. 아키텍처
+직접 호출 구조 대신 Firebase Realtime Database + Cloud Functions 구조로 바꿔,
+클라이언트의 외부 API 의존을 줄이고 서비스 안정성을 높였습니다.
 
 ```text
-[기존]
-Client → External API
-
-[개선]
 Client → Firebase Realtime Database
         ↑
-Cloud Functions (데이터 수집 및 동기화)
+Cloud Functions
         ↑
 External API
 ```
 
-- 클라이언트는 외부 API를 호출하지 않고 DB만 조회
-- Cloud Functions를 통해 데이터를 수집하고 DB에 저장
-- API 의존도를 제거하고 안정적인 데이터 제공 구조로 개선
-- 단순 데이터 조회 중심 서비스 특성상, 복잡한 서버 없이 빠르게 구축 가능한 서버리스 구조를 선택
+### 2. 검색 데이터 구조 제약
 
-## 3. 문제 해결
+입력값을 포함하는 선수 검색이 어려워, 전체 선수 조회 후 클라이언트 필터링을 시도했지만 첫 조회가 10초 이상 걸렸습니다.
 
-### 문제
+그래서:
 
-- 외부 API Rate Limit으로 인해 요청 제한 발생
-- 자동완성 입력 시 불필요한 API 요청 및 렌더링 증가
-- 초기 로딩 시 데이터 요청 지연으로 UX 저하
+- 서버 쿼리는 **prefix(접두사) 일치 선수만 조회**
+- 사용자는 **왼쪽 팀 메뉴 hover**로 선수 이름 확인
+- 이후 입력으로 후보를 빠르게 좁히는 흐름으로 보완
 
-### 해결
+즉, 데이터 구조 제약을 억지로 숨기기보다 **사용 흐름을 더 자연스럽게 만드는 방향**으로 해결했습니다.
 
-1. 서버리스 아키텍처 도입
-   - Firebase 기반 구조로 변경
-   - Cloud Functions로 데이터 수집
-   - Realtime Database에 저장 후 클라이언트 조회
+## 포트폴리오 포인트
 
-     -> API 의존도 제거, 서비스 안정성 및 가용성 확보
+- **서버리스 아키텍처 전환**으로 외부 API 직접 의존 제거
+- **React Query 기반 캐싱 / preload**로 초기 진입 경험 개선
+- **Debounce 기반 자동완성 최적화**로 입력 중 불필요한 연산 감소
+- **상태 기반 UI 전환**으로 오답 / 정답 흐름 명확화
+- **CRA → Vite + TypeScript 마이그레이션**으로 개발 생산성과 안정성 개선
 
-2. React Query 기반 데이터 관리
-   - 서버 상태를 캐싱해서 중복 요청 방지
-   - 초기 데이터 preload
+## 주요 기능
 
-   ```typescript
-   const useFetchingTeamData = (teamId: number) => {
-     const { isPending, error, data } = useQuery<IFirebaseTeamDetail, Error>({
-       queryKey: [teamId, 'total', 'team'],
-       queryFn: () => fetchTeam(teamId),
-       staleTime: 1000 * 60,
-     })
+- 블러 처리된 선수 이미지를 보고 정답을 맞추는 퀴즈
+- prefix 기반 자동완성 검색
+- 팀 메뉴 hover를 통한 선수 이름 확인 보조
+- 오답 시 힌트 제공, 정답 시 원본 이미지 및 입력 비활성화
+- React Query 기반 캐싱 / preload
+- Firebase Realtime Database / Cloud Functions 기반 서버리스 데이터 구조
 
-     return { isPending, error, team }
-   }
-   ```
-
-   → 불필요한 요청 감소 및 응답 속도 개선
-
-3. Debounce 기반 검색 성능 최적화
-
-- 자동완성 입력마다 상태가 업데이트가 발생하면서 불필요한 연산과 리렌더링이 증가하는 문제가 발생
-
-- 이를 해결하기 위해 Debounce 로직을 커스텀 훅으로 구현
-- 이전 값과 동일한 경우 상태 업데이트를 방지하기 위해 `Object.is`를 사용
-
-```typescript
-function useDebouncedValue<T>(value: T, ms: number): T {
-  const [debouncedValue, setDebouncedValue] = useState<T>(value)
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedValue(prev => (Object.is(prev, value) ? prev : value))
-    }, ms)
-
-    return () => clearTimeout(timer)
-  }, [value, ms])
-
-  return debouncedValue
-}
-```
-
-```typescript
-const debouncedValue = useDebouncedValue(value, 500)
-```
-
-## 4. 사용자 경험 및 성능 개선
-
-### 자동완성 + 클릭 입력
-
-- 선수 이름 자동완성 제공
-- 팀 이미지 hover 시 선수 목록 확인 및 입력 지원
-  -> 입력 편의성 향상 및 사용자 진입 장벽 감소
-
-### 상태 기반 UI 변화
-
-```text
-오답 -> 힌트 제공
-정답 -> 원본 이미지 제공 + 입력 비활성화
-```
-
-### 초기 로딩 개선
-
-- 데이터 preload + Skeleton UI 적용
-  -> 로딩 지연 최소화 및 자연스러운 화면 제공
-
-### 마이그레이션
-
-기존 CRA 기반 JavaScript 프로젝트를  
-Vite + TypeScript 환경으로 마이그레이션했습니다.
-
-- 빌드 속도 개선 및 개발 생산성 향상
-- 타입 정의를 통한 안정성 확보
-
-## 5. 기술 스택
+## 기술 스택
 
 - React
-- Styled Components
 - TypeScript
+- Vite
+- Styled Components
 - React Query
-- Github Actions
 - Recoil
 - Firebase (Realtime Database / Cloud Functions)
+- GitHub Actions
 
-## 6. 기술 선택 이유
-
-### React Query
-
-서버 상태를 캐싱해 중복 요청을 줄이고 데이터 흐름 단순화
-
-### Recoil
-
-전역 상태를 atom 단위로 관리하여 간결한 구조 유지
-
-### Firebase
-
-서버 없이 데이터 저장과 처리 가능한 서버리스 환경으로 빠른 구조 개선 가능
-
-### Github Actions
-
-초기에는 데이터 업데이트 자동화를 위해 사용
-
-(현재는 데이터 특성상 수동 업데이트 방식으로 운영)
-
-## 7. 담당 역할
-
-- 전체 프론트엔드 개발 (단독 프로젝트)
-- UI 설계 및 사용자 인터랙션 구현
-- 자동완성 검색 및 게임 로직 구현
-- 상태 관리 및 데이터 흐름 설계
-- 성능 최적화 (Debounce, 캐싱, preload)
-
-## 8. 결과
-
-- API Rate Limit으로 인한 요청 제한 없이 안정적인 서비스 제공
-- 불필요한 API 요청 감소 및 데이터 응답 안정성 확보
-- 사용자 입력 시 지연 없이 자연스러운 인터랙션 경험 제공
-
-### Lighthouse (로컬 측정 → README 동기화 예시)
-
-1. `npm run build` 후 `npx lhci collect` (또는 `lhci autorun`)
-2. `npm run sync:lighthouse-readme`
-3. README의 아래 표가 `.lighthouseci/lhr-*.json` 기준으로 갱신됩니다. 확인 후 커밋합니다.
-
-<!-- LIGHTHOUSE_SCORES_START -->
-
-_(아직 측정하지 않았다면 1번을 실행한 뒤 2번을 실행합니다.)_
-
-<!-- LIGHTHOUSE_SCORES_END -->
-
-## 9. 개선 방향
-
-- 테스트 코드 도입
-- 문제 다양성 확장
-- 점수 및 랭킹 시스템
-- Next.js 기반 확장
-
-## 10. 실행
+## 실행 방법
 
 ```bash
 npm install
 npm run dev
 ```
 
----
+## 더 보기
 
-참고 자료
-
-#### 성능 관련 CI/CD
-
-- Lighthouse CI: [카카오엔터 기술 블로그](https://tech.kakaoent.com/front-end/2022/220602-lighthouse-with-github-actions/)
-- bundleSize
-- Webpack Bundle Analyzer
-- PageSpeed: [PageSpeed Insights](https://pagespeed.web.dev/)
-
-# 리팩토링
-
-## 코드 구조 변경
-
-```text
-src/
-├── app/                          # 앱 셸 (라우팅 진입)
-│   ├── BrowserRouter.tsx         # (이동) src/BrowserRouter.tsx
-│   └── router.tsx                # (이동) src/routes/router.tsx
-│
-├── pages/
-│   ├── cover/
-│   │   └── Cover.tsx
-│   └── submission/
-│       └── Submission.tsx
-│
-├── components/
-│   ├── layout/                   # 유지
-│   │   └── RootLayout.tsx
-│   ├── shared/                   # 여러 화면 공통
-│   │   ├── Header.tsx
-│   │   ├── ProtectedRoute.tsx
-│   │   └── Profiler.tsx
-│   ├── cover/
-│   │   └── LeagueSelectModal.tsx
-│   ├── club/
-│   │   ├── Club.tsx
-│   │   ├── ClubViews.tsx
-│   │   └── club-squad-modal/
-│   │       ├── index.tsx
-│   │       ├── style.ts
-│   │       └── hooks/
-│   │           └── useClubSquadModal.ts   # (이동) hook.ts — 파일명만 경로 정리 시 변경
-│   ├── search/
-│   │   ├── SearchForm.tsx
-│   │   ├── AutoSearch.tsx
-│   │   └── HintBox.tsx
-│   └── submission/               # 기존 submission 트리 유지·정리
-│       ├── SubmissionGameContainer.tsx
-│       ├── styles.ts
-│       ├── components/
-│       │   ├── ChangeButton.tsx
-│       │   ├── SubmissionCard.tsx
-│       │   ├── SubmissionCard.styles.ts
-│       │   └── SubmissionLoader.tsx
-│       └── hooks/
-│           └── useSubmissionGame.ts
-│
-├── hooks/
-│   ├── ui/
-│   │   ├── useBreakpoint.ts
-│   │   └── useDebouncedValue.ts
-│   ├── data/                     # Firebase/React Query fetch
-│   │   ├── useFetchingPlayerData.ts
-│   │   ├── useFetchingPlayersDataInLeague.ts
-│   │   ├── useFetchingPlayersIdInLeague.ts
-│   │   ├── useFetchingTeamData.ts
-│   │   ├── useFetchingTeamPlayers.ts
-│   │   └── useFetchingTeamsDataInLeague.ts
-│   └── quiz/
-│       ├── useQuizGenerator.ts
-│       └── useFilteringPlayersName.ts
-│
-├── api/          # (변경 없음)
-├── state/
-├── lib/
-├── services/
-├── constant/
-├── styles/
-├── types/
-└── utils/
-```
-
-```text
-src/
-├── app/          # 앱 진입 및 URL 매핑 (UI, 데이터 로직 없음)
-├── pages/        # 페이지 컴포넌트
-├── lib/          # 인프라 및 공통 클라이언트 설정
-├── services/     # API (데이터 조회 로직)
-├── types/        # 타입 정의 (.types.ts)
-├── state/        # 전역 상태
-├── constant/     # 상수, 고정값
-├── styles/       # 전역 스타일 및 테마
-└── utils/        # helper
-```
-
-<!-- [v] TODO: 파일 구조 변경 -->
-<!-- [ ] TODO: 자동 완성 검색을 위한 선수 전체 데이터 검색 -> id 프리페칭 + query 조회 + 모달 조회 방식 변경으로 렌더링 속도 확인-->
-<!-- [v] TODO: Clubviews useQuery -> useQueries 조회 변경 -->
+- 상세 설명: `docs/portfolio.md`
+- 이전 상세 README 보관본: `README.archive.md`
