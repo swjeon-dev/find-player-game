@@ -67,6 +67,8 @@ jobs:
           npm run build
           # functions 빌드 (경로 에러가 나도 중단되지 않게 처리하려면 || true 사용)
           # cd functions && (npm run build || true)
+          cp dist/index.html dist/404.html
+          # 404.html 파일 생성. submission 페이지 이동 시 404 페이지로 이동하도록 설정
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
