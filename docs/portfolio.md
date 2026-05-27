@@ -131,6 +131,122 @@ External API
 특히 검색은 "정확한 기술 구현"보다  
 **제약 속에서 사용 가능한 경험을 만드는 것**이 더 중요하다는 점을 다시 느끼게 한 포인트였습니다.
 
+### CSR 앱을 정적 호스팅에 배포했을 때 겪은 문제
+
+GitHub Pages에 배포한 뒤, `/submission` 페이지는 **앱 내부 이동으로 들어갈 때는 정상 동작했지만 새로고침이나 직접 접근 시 GitHub 404 페이지가 나타나는 문제**가 있었습니다.
+
+처음에는 `ProtectedRoute`나 `Navigate` 처리 문제라고 생각했지만,  
+실제로는 **React 앱이 실행되기 전에 GitHub Pages가 먼저 해당 경로에 대응하는 정적 파일을 찾다가 404를 반환하는 구조**가 원인이었습니다.
+
+제가 실제로 사용한 라우터 구조는 아래와 같았습니다.
+
+```ts
+{
+  path: routerPath.SUBMISSION,
+  element: <ProtectedRoute />,
+  children: [
+    {
+      index: true,
+      element: <Submission />,
+    },
+  ],
+},
+{
+  path: '*',
+  element: <NotFound />,
+}
+```
+
+그리고 `ProtectedRoute`는 리그 선택 정보가 없으면 홈으로 보내는 방식이었습니다.
+
+```ts
+if (!leagueInfo.id) {
+  alert('먼저 리그를 선택해주세요.')
+  return <Navigate to={routerPath.HOME} replace />
+}
+
+return <Outlet />
+```
+
+앱이 이미 실행된 상태에서 `/submission`으로 이동하면 이 로직은 정상적으로 동작합니다.  
+하지만 GitHub Pages에서 `/submission`을 직접 요청하면, React Router가 경로를 해석하기 전에 서버가 먼저 `/submission`에 해당하는 정적 파일을 찾습니다.
+
+즉:
+
+- 메인 페이지에서 이동: React 앱 실행 후 `ProtectedRoute` 동작
+- 직접 접근 / 새로고침: 정적 서버가 먼저 파일 탐색 -> 없으면 GitHub 404 반환
+
+그래서 `path: '*'`로 만든 `NotFound` 페이지도,  
+앱이 실행되지 못한 상황에서는 적용되지 않는다는 점을 확인할 수 있었습니다.
+
+### 현재 선택한 방식
+
+현재는 `BrowserRouter` 기반 구조를 유지하면서,
+
+- 앱이 실행된 뒤의 잘못된 경로는 `NotFound` 페이지로 처리하고
+- `ProtectedRoute`가 적용된 `/submission` 경로를 직접 요청하거나 새로고침할 때는 fallback으로 앱을 다시 실행한 뒤, session 데이터가 없으면 홈으로 리다이렉트되도록 처리했습니다
+
+이 과정을 통해 "로컬에서는 되는데 배포에서는 안 되는 이유"를
+React 코드가 아니라 **호스팅 서버의 동작 관점**에서 설명할 수 있게 된 점이 의미 있는 학습 포인트였습니다.
+
+<!--
+검토했던 방법
+
+1. HashRouter
+- /#/submission 형태가 되어 서버는 루트 경로만 보고, hash 뒤는 브라우저가 해석
+- 직접 접근 404를 피할 수 있음
+- 다만 URL이 덜 깔끔해서 데스크톱 웹 서비스 포트폴리오 관점에서는 아쉽다고 판단
+
+2. 404.html fallback
+- index.html을 404.html로도 제공하면 GitHub Pages의 404 응답을 앱 재진입 지점으로 활용 가능
+- 현재 구조를 크게 바꾸지 않고 새로고침 문제를 우회할 수 있음
+- 다만 배포 산출물에 fallback 파일을 별도로 관리해야 하고, 정적 404 페이지가 아니라 앱을 다시 실행시키는 우회 엔트리라는 점에서 특수한 처리
+
+참고 메모: 우선순위는 낮지만, 배포/라우팅 제약 설명이 필요할 때 다시 살릴 수 있는 내용
+
+React Router의 BrowserRouter는 기본적으로:
+
+index.html 로드
+-> JS 실행
+-> Router가 현재 URL 해석
+-> ProtectedRoute / 페이지 컴포넌트 렌더
+
+같은 흐름을 기대합니다.
+
+하지만 GitHub Pages 같은 정적 호스팅은:
+
+/submission 요청
+-> 서버가 /submission 에 해당하는 실제 정적 파일 탐색
+-> 없으면 GitHub 404 반환
+
+처럼 동작합니다.
+
+즉, 정적 서버에서는 React 앱이 실행되기 전에 먼저 파일 존재 여부를 판단하기 때문에,
+직접 URL 접근이나 새로고침 시에는 ProtectedRoute, Navigate, NotFound 같은 React 컴포넌트까지 도달하지 못할 수 있습니다.
+
+반면 Vercel, Netlify, Firebase Hosting처럼 rewrite 설정이 가능한 호스팅은 보통:
+
+모든 경로 요청
+-> index.html 반환
+-> React 앱 실행
+-> 클라이언트 라우터가 URL 해석
+
+흐름으로 처리할 수 있어, 같은 CSR 구조라도 새로고침 문제를 덜 겪습니다.
+
+rewrite:
+사용자가 어떤 경로로 들어오더라도 서버가 그 경로에 대응하는 실제 파일을 찾는 대신,
+앱 엔트리 파일(index.html)을 반환하도록 바꾸는 처리
+
+fallback:
+정적 서버의 404 응답을 앱 재진입 지점으로 바꾸는 우회 방식
+예: /submission -> 파일 없음 -> 404.html 반환 -> React 앱 실행 -> 라우터가 URL 다시 해석
+
+HashRouter:
+URL에서 서버가 해석하는 부분과 클라이언트가 해석하는 부분을 분리하는 방식
+예: /find-player-game/#/submission
+서버는 /find-player-game/ 까지만 보고, # 이후는 브라우저/클라이언트가 해석
+-->
+
 ## 향후 개선 방향
 
 - 테스트 코드 도입
@@ -138,3 +254,4 @@ External API
 - 점수 및 랭킹 시스템
 - Next.js 기반 확장
 - 파일 구조 리팩터링
+- GitHub Pages의 CSR 새로고침 이슈를 fallback 또는 호스팅 전략 관점에서 정리
