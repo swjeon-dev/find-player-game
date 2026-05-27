@@ -2,12 +2,11 @@
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://swjeon-dev.github.io/find-player-game/) ![Deploy Status](https://img.shields.io/github/actions/workflow/status/swjeon-dev/find-player-game/deploy.yml?branch=master&style=flat-square&label=Deploy&logo=GitHub%20Actions&logoColor=white)
 
-외부 API Rate Limit 문제를 해결하기 위해 **Firebase 기반 서버리스 구조**로 개선한 축구 선수 퀴즈 서비스입니다.  
-블러 처리된 프리미어리그 선수 이미지를 보고 정답을 맞추는 과정에서 **자동완성, 힌트, 상태 기반 UI, 캐싱된 데이터 흐름**을 제공합니다.
+**CRA(deprecated) + JavaScript** 기반 서비스를 **Vite + TypeScript**로 마이그레이션하고, 외부 API Rate Limit 등 **제약 환경을 개선**하며, **프론트엔드 관점에서 사용자 체감**을 높인 축구 선수 퀴즈입니다.
 
 ## 한 줄 소개
 
-**외부 API 직접 의존 구조를 서버리스 구조로 전환하고, 검색 제약을 UX 설계로 풀어낸 축구 선수 퀴즈 웹 서비스**입니다.
+**Vite + TS 전환, API 제약 환경 개선, 프론트 관점 체감 UX 개선**을 다룬 축구 선수 퀴즈 웹 서비스입니다.
 
 ## Demo
 
@@ -33,20 +32,32 @@ External API
 
 ### 2. 검색 데이터 구조 제약
 
-입력값을 포함하는 선수 검색이 어려워, 전체 선수 조회 후 클라이언트 필터링을 시도했지만 첫 조회가 10초 이상 걸렸습니다.
+Firebase Realtime Database는 선수 정보가 `playerId` 단위로 저장되어, **contains 검색**이나 한 번의 조회로 전체 선수 목록을 가져오기 어렵습니다.
+
+```text
+/leagues/{leagueId}/teamIds, playerIds   → id 목록
+/teams/{teamId}/playerIds                 → id 목록
+/players/{playerId}/info                  → 선수 상세
+/players                                  → 이름 prefix 검색
+```
+
+실제 조회는 보통 `id 목록 조회 → 선수 상세 조회`처럼 여러 단계를 거칩니다. 전체 선수를 먼저 가져와 클라이언트에서 필터링하면 첫 조회가 10초 이상 걸렸습니다.
 
 그래서:
 
 - 서버 쿼리는 **prefix(접두사) 일치 선수만 조회**
+- **hover 기반 prefetch**로 다음 단계에 필요한 id·상세 데이터를 미리 준비
 - 사용자는 **왼쪽 팀 메뉴 hover**로 선수 이름 확인
 - 이후 입력으로 후보를 빠르게 좁히는 흐름으로 보완
 
-즉, 데이터 구조 제약을 억지로 숨기기보다 **사용 흐름을 더 자연스럽게 만드는 방향**으로 해결했습니다.
+즉, 데이터 구조 제약을 억지로 숨기기보다 **prefetch와 UX 설계로 체감 대기 시간을 줄이는 방향**으로 해결했습니다.
 
 ## 포트폴리오 포인트
 
-- **서버리스 아키텍처 전환**으로 외부 API 직접 의존 제거
-- **React Query 기반 캐싱 / preload**로 초기 진입 경험 개선
+- **Firebase(Cloud Functions + Realtime Database) 서버리스 레이어**로 외부 API 직접 호출·Rate Limit 문제 완화
+- **데이터 구조 제약을 인정한 prefetch·UX 설계**로 다단계 조회의 체감 지연 완화
+- **React Query 기반 캐싱 / persist**로 중복 요청 감소
+- **route-level lazy loading**으로 홈 첫 진입 엔트리 청크 약 4.6 KiB(gzip) 분리
 - **Debounce 기반 자동완성 최적화**로 입력 중 불필요한 연산 감소
 - **상태 기반 UI 전환**으로 오답 / 정답 흐름 명확화
 - **CRA → Vite + TypeScript 마이그레이션**으로 개발 생산성과 안정성 개선
@@ -57,7 +68,7 @@ External API
 - prefix 기반 자동완성 검색
 - 팀 메뉴 hover를 통한 선수 이름 확인 보조
 - 오답 시 힌트 제공, 정답 시 원본 이미지 및 입력 비활성화
-- React Query 기반 캐싱 / preload
+- React Query 기반 캐싱 / prefetch
 - Firebase Realtime Database / Cloud Functions 기반 서버리스 데이터 구조
 
 ## 기술 스택
@@ -77,8 +88,3 @@ External API
 npm install
 npm run dev
 ```
-
-## 더 보기
-
-- 상세 설명: `docs/portfolio.md`
-- 이전 상세 README 보관본: `README.archive.md`
