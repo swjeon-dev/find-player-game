@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 
-import useDebouncedValue from '@/hooks/ui/useDebouncedValue'
+import { useDebouncedValue } from '@/shared'
 import { inputState } from '@/state'
 import type { IHint } from '@/types'
 import type { IFirebasePlayer } from '@/types'
-import { useFilteringPlayersName } from '@/hooks/quiz/useFilteringPlayersName'
+import { useFilteringPlayersName } from '@/entities/search/model'
 import AutoSearch from './AutoSearch'
 import * as S from './SearchForm.style'
 
