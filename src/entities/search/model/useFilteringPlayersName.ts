@@ -5,8 +5,8 @@ import type { IFirebasePlayer } from '@/types'
 import {
   fetchFilteringPlayersByName,
   type FilteringPlayersByNameRaw,
-} from '@/services/clientService'
-import { queryKeysMain } from '@/lib/queryKeys'
+} from '@/shared/api'
+import { queryKeysMain } from '@/shared'
 
 const MIN_QUERY_LEN = 2
 const LIMIT = 20

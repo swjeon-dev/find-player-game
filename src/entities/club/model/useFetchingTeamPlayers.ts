@@ -4,9 +4,9 @@ import {
   type QueryClient,
 } from '@tanstack/react-query'
 
-import { fetchPlayer, fetchTeamPlayerIds } from '@/services/clientService'
+import { fetchPlayer, fetchTeamPlayerIds } from '@/shared/api'
 import type { IFirebasePlayer } from '@/types'
-import { queryKeysMain } from '@/lib/queryKeys'
+import { queryKeysMain } from '@/shared'
 
 function prefetchTeamPlayersId(
   queryClient: QueryClient,

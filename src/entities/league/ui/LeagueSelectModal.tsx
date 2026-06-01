@@ -5,12 +5,12 @@ import { useSetRecoilState } from 'recoil'
 
 import { ROUTER_PATH } from '@/shared'
 import { useDebouncedCallback } from '@/shared'
-import { queryClient } from '@/lib/queryClient'
+import { queryClient } from '@/app/providers'
 import {
   fetchPlayerIdsInLeague,
   fetchTeamIdsInLeague,
-} from '@/services/clientService'
-import { queryKeysMain } from '@/lib/queryKeys'
+} from '@/shared/api'
+import { queryKeysMain } from '@/shared'
 import { leagueInfoState } from '@/state'
 
 import emblemImage from '/emblem/pl.webp'
