@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { SkeletonBase } from '@/shared/ui/skeleton'
+import { SkeletonBase } from '@/shared'
 
 const FormContainer = styled.div<{
   $isPending: boolean

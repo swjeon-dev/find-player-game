@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { useQuizGenerator } from '@/widget/submission/model'
+import { useQuizGenerator } from '../model'
 import SubmissionCard from './SubmissionCard'
 import { SubmissionLoader } from './SubmissionLoader'
 import { Container } from './SubmissionGameContainer.style'

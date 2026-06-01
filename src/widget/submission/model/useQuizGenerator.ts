@@ -4,7 +4,7 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import {
   leagueInfoState,
   useFetchingPlayersIdInLeague,
-} from '@/entities/league/model'
+} from '@/entities/league'
 import { quizState } from './quizState'
 
 import useFetchingPlayerData from './useFetchingPlayerData'
