@@ -21,7 +21,7 @@ const SectionHeading = styled.h2`
   border: 0;
 `
 
-export const Cover = () => {
+const Cover = () => {
   return (
     <>
       <Helmet>
@@ -40,3 +40,5 @@ export const Cover = () => {
     </>
   )
 }
+
+export default Cover

@@ -4,7 +4,7 @@ import routerPath from '@/constant/routerPath'
 
 import * as S from './NotFound.style'
 
-export default function NotFound() {
+function NotFound() {
   return (
     <>
       <Helmet>
@@ -31,3 +31,5 @@ export default function NotFound() {
     </>
   )
 }
+
+export default NotFound

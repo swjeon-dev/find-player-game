@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async'
 import SubmissionGameContainer from '@/components/submission/SubmissionGameContainer'
 import ClubViews from '@/entities/club/ui/ClubViews'
 
-export default function Submission() {
+function Submission() {
   return (
     <>
       <Helmet>
@@ -19,3 +19,5 @@ export default function Submission() {
     </>
   )
 }
+
+export default Submission
