@@ -1,10 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { lazy, memo, Suspense, useEffect, useRef } from 'react'
 
-import { prefetchTeamPlayersId } from '@/entities/club/model'
-
+import { useClubSquadModalTrigger, prefetchTeamPlayersId } from '../model'
 import type { IFirebaseTeamDetail } from '@/shared'
-import { useClubSquadModalTrigger } from '../model'
 import * as S from './Club.style'
 
 const ClubSquadModalLazy = lazy(() => import('./ClubSquadModal'))

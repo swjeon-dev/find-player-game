@@ -1,5 +1,6 @@
-import { useBreakpoint } from '@/shared'
 import { useCallback, useEffect, useState } from 'react'
+
+import { useBreakpoint } from '@/shared'
 
 // 패널 제어
 export const useClubTabletPanel = () => {
