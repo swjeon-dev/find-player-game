@@ -4,7 +4,7 @@ import { leagueInfoState } from '@/state'
 
 import { Club } from '@/entities/club'
 import { useClubTabletPanel } from '@/entities/club/model'
-import useFetchingTeamsDataInLeague from '@/hooks/data/useFetchingTeamsDataInLeague'
+import { useFetchingTeamsDataInLeague } from '@/entities/league/model'
 import * as S from './ClubViews.style'
 
 /**
