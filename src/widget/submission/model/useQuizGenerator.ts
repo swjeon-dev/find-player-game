@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
+import { useFetchingPlayersIdInLeague } from '@/entities/league/model'
 import { leagueInfoState, quizState } from '@/state'
 
-import useFetchingPlayerData from '../data/useFetchingPlayerData'
-import useFetchingPlayersIdInLeague from '../data/useFetchingPlayersIdInLeague'
+import useFetchingPlayerData from './useFetchingPlayerData'
 
 const MAX_RANDOM_TRIES = 100
 
