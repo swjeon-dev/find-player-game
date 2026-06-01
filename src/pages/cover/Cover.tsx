@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { Helmet } from 'react-helmet-async'
 
-import LeagueSelectModal from '@/entities/modal/league/ui/LeagueSelectModal'
+import { LeagueSelectModalTrigger } from '@/entities'
 
 const CoverSection = styled.section`
   width: 100%;
@@ -35,7 +35,7 @@ const Cover = () => {
 
       <CoverSection aria-labelledby='cover-game-heading'>
         <SectionHeading id='cover-game-heading'>Game Start</SectionHeading>
-        <LeagueSelectModal />
+        <LeagueSelectModalTrigger />
       </CoverSection>
     </>
   )

@@ -38,7 +38,7 @@ interface LeagueSelectModalProps {
   children: (handlers: { openModal: () => void }) => React.ReactNode
 }
 
-export default function LeagueSelectModalTrigger() {
+function LeagueSelectModalTrigger() {
   return (
     <LeagueSelectModalContainer>
       {({ openModal }) => (
@@ -143,3 +143,5 @@ function LeagueSelectModalContainer({ children }: LeagueSelectModalProps) {
     </>
   )
 }
+
+export default LeagueSelectModalTrigger
