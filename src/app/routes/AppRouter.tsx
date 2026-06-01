@@ -4,12 +4,14 @@ import styled from 'styled-components'
 
 import ProtectedRoute from '@/app/routes/ProtectedRoute'
 import RootLayout from '@/shared/ui/layout/RootLayout'
-import { Cover } from '@/pages/cover/Cover'
+import { Cover } from '@/pages/cover'
 import routerPath from '@/constant/routerPath'
 import { SkeletonBase } from '@/utils/skeletonUI'
-import NotFound from '@/pages/not-found/NotFound'
+import { NotFound } from '@/pages/not-found'
 
-const Submission = lazy(() => import('@/pages/submission/Submission'))
+const Submission = lazy(() =>
+  import('@/pages/submission').then(m => ({ default: m.Submission })),
+)
 
 const RouteFallback = styled(SkeletonBase)`
   width: 100%;
