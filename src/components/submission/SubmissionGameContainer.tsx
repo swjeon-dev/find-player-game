@@ -4,7 +4,7 @@ import useQuizGenerator from '@/hooks/quiz/useQuizGenerator'
 import SubmissionCard from './components/SubmissionCard'
 import { SubmissionLoader } from './components/SubmissionLoader'
 import { Container } from './styles'
-import ProfileComp from '../layout/Profiler'
+import ProfileComp from '../../shared/ui/layout/Profiler'
 
 export default function SubmissionGameContainer() {
   const {
