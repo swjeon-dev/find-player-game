@@ -1,4 +1,4 @@
-import { useBreakpoint } from '@/shared/lib'
+import { useBreakpoint } from '@/shared'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 

@@ -1,10 +1,10 @@
-import { firebaseApiInstance } from '@/shared/api/client'
+import { FIREBASE_API_ENDPOINT } from '../config'
 import {
   getFirebaseURLPath,
   type FirebaseReturnPath,
-} from '@/shared/config/firebasePath'
-import { FIREBASE_API_ENDPOINT } from '@/shared/config'
-import type { IFirebasePlayer, IFirebaseTeamDetail } from '@/shared/types'
+} from '../config/firebasePath'
+import type { IFirebasePlayer, IFirebaseTeamDetail } from '../types'
+import { firebaseApiInstance } from './client'
 
 export type FilteringPlayerNode = {
   info: IFirebasePlayer

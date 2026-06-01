@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { breakpoints } from '@/shared/config'
+import { breakpoints } from '../../config'
 
 export type BreakpointMatches = {
   readonly mobile: boolean

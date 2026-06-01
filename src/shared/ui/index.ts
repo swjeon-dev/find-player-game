@@ -1,2 +1,2 @@
-export * from './layout/index'
+export * from './layout'
 export * from './skeleton'
