@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil'
 import { ROUTER_PATH } from '@/shared'
 import { leagueInfoState } from '@/entities/league'
 
-export default function ProtectedRoute() {
+function ProtectedRoute() {
   const leagueInfo = useRecoilValue(leagueInfoState)
 
   // Vite는 VITE_* 를 `vite build` 시점에 번들에 넣습니다.
@@ -19,3 +19,5 @@ export default function ProtectedRoute() {
 
   return <Outlet />
 }
+
+export default ProtectedRoute

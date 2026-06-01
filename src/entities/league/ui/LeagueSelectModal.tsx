@@ -1,11 +1,11 @@
 import { createPortal } from 'react-dom'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
 import { useSetRecoilState } from 'recoil'
 
 import { ROUTER_PATH } from '@/shared'
 import { useDebouncedCallback } from '@/shared'
-import { queryClient } from '@/app/providers'
 import { fetchPlayerIdsInLeague, fetchTeamIdsInLeague } from '@/shared/api'
 import { queryKeysMain } from '@/shared'
 import { leagueInfoState } from '@/entities/league'
@@ -54,6 +54,7 @@ function LeagueSelectModalContainer({ children }: LeagueSelectModalProps) {
   const [isOpen, setIsOpen] = useState(false)
   const dialogRef = useRef<HTMLDialogElement>(null)
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const setLeagueInfo = useSetRecoilState(leagueInfoState)
 
   const closeModal = useCallback(() => {
@@ -86,7 +87,7 @@ function LeagueSelectModalContainer({ children }: LeagueSelectModalProps) {
         queryFn: () => fetchPlayerIdsInLeague(leagueId),
       })
     }
-  }, [])
+  }, [queryClient])
 
   const prefetchingLeagueData = useDebouncedCallback(prefetchLeagueData, 200)
 

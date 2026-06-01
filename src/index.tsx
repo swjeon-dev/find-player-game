@@ -7,10 +7,11 @@ import { QueryClientProvider } from '@tanstack/react-query'
 
 import {
   AppRouterProvider,
+  GlobalStyle,
   queryClient,
   setupQueryPersist,
-} from '@/app/providers'
-import { theme } from '@/shared/config'
+} from '@/app'
+import { theme } from '@/shared'
 
 setupQueryPersist()
 
@@ -21,6 +22,7 @@ createRoot(document.getElementById('root') as HTMLElement).render(
         <ThemeProvider theme={theme}>
           <RecoilRoot>
             <AppRouterProvider />
+            <GlobalStyle />
           </RecoilRoot>
         </ThemeProvider>
       </HelmetProvider>

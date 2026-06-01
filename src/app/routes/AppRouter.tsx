@@ -2,11 +2,9 @@ import { lazy, Suspense } from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 import styled from 'styled-components'
 
-import ProtectedRoute from '@/app/routes/ProtectedRoute'
-import RootLayout from '@/shared/ui/layout/RootLayout'
+import ProtectedRoute from './ProtectedRoute'
+import { RootLayout, ROUTER_PATH, SkeletonBase } from '@/shared'
 import { Cover } from '@/pages/cover'
-import { ROUTER_PATH } from '@/shared'
-import { SkeletonBase } from '@/shared/ui/skeleton'
 import { NotFound } from '@/pages/not-found'
 
 const Submission = lazy(() =>
