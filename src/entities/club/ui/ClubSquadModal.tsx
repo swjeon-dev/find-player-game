@@ -1,6 +1,6 @@
 import { memo, useRef } from 'react'
 
-import { useFetchingTeamPlayersData } from '@/hooks/data/useFetchingTeamPlayers'
+import { useFetchingTeamPlayersData } from '@/entities/club/model'
 
 import { useModalPosition, useSelectPlayer } from '../model'
 import * as S from './ClubSquadModal.style'

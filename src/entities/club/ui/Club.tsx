@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { lazy, memo, Suspense, useEffect, useRef } from 'react'
 
-import { prefetchTeamPlayersId } from '@/hooks/data/useFetchingTeamPlayers'
+import { prefetchTeamPlayersId } from '@/entities/club/model'
 
 import type { IFirebaseTeamDetail } from '@/types'
 import { useClubSquadModalTrigger } from '../model'
