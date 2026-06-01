@@ -2,10 +2,10 @@ import { useRecoilValue } from 'recoil'
 
 import { leagueInfoState } from '@/state'
 
-import Club from './Club'
+import { Club } from '@/entities/club'
+import { useClubTabletPanel } from '@/entities/club/model'
 import useFetchingTeamsDataInLeague from '@/hooks/data/useFetchingTeamsDataInLeague'
 import * as S from './ClubViews.style'
-import { useClubTabletPanel } from '../model/useClubTabletPanel'
 
 /**
  * 
@@ -91,6 +91,7 @@ const ClubViews = () => {
                       key={teamId}
                       {...q.data}
                       offTablet={closeTabletPanel}
+                      enableSquadModal
                     />
                   )
                 }
