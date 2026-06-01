@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useSetRecoilState } from 'recoil'
 
 import { inputState } from '@/entities/search'
-import type { IHint } from '@/types'
+import type { IHint } from '@/shared'
 
 interface IUseSubmissionGameProps {
   generateQuiz: () => void

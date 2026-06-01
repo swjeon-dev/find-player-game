@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
-import type { IFirebasePlayer } from '@/types'
+import type { IFirebasePlayer } from '@/shared'
 import {
   fetchFilteringPlayersByName,
   type FilteringPlayersByNameRaw,

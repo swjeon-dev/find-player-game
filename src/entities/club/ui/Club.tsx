@@ -3,7 +3,7 @@ import { lazy, memo, Suspense, useEffect, useRef } from 'react'
 
 import { prefetchTeamPlayersId } from '@/entities/club/model'
 
-import type { IFirebaseTeamDetail } from '@/types'
+import type { IFirebaseTeamDetail } from '@/shared'
 import { useClubSquadModalTrigger } from '../model'
 import * as S from './Club.style'
 

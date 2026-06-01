@@ -4,7 +4,7 @@ import {
   type FirebaseReturnPath,
 } from '@/shared/config/firebasePath'
 import { FIREBASE_API_ENDPOINT } from '@/shared/config'
-import type { IFirebasePlayer, IFirebaseTeamDetail } from '@/types'
+import type { IFirebasePlayer, IFirebaseTeamDetail } from '@/shared/types'
 
 export type FilteringPlayerNode = {
   info: IFirebasePlayer

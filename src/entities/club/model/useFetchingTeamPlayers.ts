@@ -5,7 +5,7 @@ import {
 } from '@tanstack/react-query'
 
 import { fetchPlayer, fetchTeamPlayerIds } from '@/shared/api'
-import type { IFirebasePlayer } from '@/types'
+import type { IFirebasePlayer } from '@/shared'
 import { queryKeysMain } from '@/shared'
 
 function prefetchTeamPlayersId(

@@ -1,5 +1,4 @@
-import { Position, type IFirebasePlayer } from '@/types'
-import type { IHint } from '@/types/quiz.types'
+import { Position, type IFirebasePlayer, type IHint } from '@/shared'
 
 import * as S from './HintBox.style'
 
