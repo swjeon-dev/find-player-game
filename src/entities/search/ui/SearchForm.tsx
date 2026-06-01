@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 
-import { useDebouncedValue } from '@/shared'
-import { inputState } from '../model'
-import type { IFirebasePlayer, IHint } from '@/shared'
-import { useFilteringPlayersName } from '@/entities/search/model'
+import { useDebouncedValue, type IFirebasePlayer, type IHint } from '@/shared'
+import { inputState, useFilteringPlayersName } from '../model'
 import AutoSearch from './AutoSearch'
 import * as S from './SearchForm.style'
 

@@ -1,12 +1,12 @@
 import { useCallback } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
-import type { IFirebasePlayer } from '@/shared'
 import {
   fetchFilteringPlayersByName,
+  queryKeysMain,
   type FilteringPlayersByNameRaw,
-} from '@/shared/api'
-import { queryKeysMain } from '@/shared'
+  type IFirebasePlayer,
+} from '@/shared'
 
 const MIN_QUERY_LEN = 2
 const LIMIT = 20
