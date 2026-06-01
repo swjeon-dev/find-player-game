@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import styled from 'styled-components'
 
-import { GlobalStyle } from '@/styles/GlobalStyle'
+import { GlobalStyle } from '@/app/styles'
 import Header from './Header'
 
 const Container = styled.div`
