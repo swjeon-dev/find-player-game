@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useSetRecoilState } from 'recoil'
 
 import { ROUTER_PATH } from '@/shared'
-import { useDebouncedCallback } from '@/hooks/ui/useDebouncedCallback'
+import { useDebouncedCallback } from '@/shared'
 import { queryClient } from '@/lib/queryClient'
 import {
   fetchPlayerIdsInLeague,

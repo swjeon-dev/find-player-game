@@ -1,4 +1,4 @@
-import useBreakpoint from '@/hooks/ui/useBreakpoint'
+import { useBreakpoint } from '@/shared/lib'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 

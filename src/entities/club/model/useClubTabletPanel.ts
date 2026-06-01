@@ -1,4 +1,4 @@
-import useBreakpoint from '@/hooks/ui/useBreakpoint'
+import { useBreakpoint } from '@/shared'
 import { useCallback, useEffect, useState } from 'react'
 
 // 패널 제어

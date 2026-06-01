@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 
-import useDebouncedValue from '@/hooks/ui/useDebouncedValue'
+import { useDebouncedValue } from '@/shared'
 
 interface UseClubSquadModalTriggerParams {
   onClose: () => void
