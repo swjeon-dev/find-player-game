@@ -16,7 +16,7 @@ export const useClubSquadModalTrigger = ({
   const handleMouseEnter = useCallback(() => {
     if (clicked) return
     setIsHover(true)
-    void import('@/entities/modal/club')
+    void import('../ui/ClubSquadModal')
   }, [clicked])
 
   const handleMouseLeave = useCallback(() => {

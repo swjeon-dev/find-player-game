@@ -1,26 +1,25 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { lazy, memo, Suspense, useEffect, useRef } from 'react'
-import { useMatch } from 'react-router-dom'
 
-import routerPath from '@/constant/routerPath'
 import { prefetchTeamPlayersId } from '@/hooks/data/useFetchingTeamPlayers'
 
 import type { IFirebaseTeamDetail } from '@/types'
 import { useClubSquadModalTrigger } from '../model'
 import * as S from './Club.style'
 
-const ClubSquadModalLazy = lazy(() =>
-  import('@/entities/modal/club').then(m => ({ default: m.ClubSquadModal })),
-)
+const ClubSquadModalLazy = lazy(() => import('./ClubSquadModal'))
 
 const Club = ({
   logo,
   name,
   id,
   offTablet,
-}: IFirebaseTeamDetail & { offTablet: () => void }) => {
+  enableSquadModal = false,
+}: IFirebaseTeamDetail & {
+  offTablet: () => void
+  enableSquadModal?: boolean
+}) => {
   const queryClient = useQueryClient()
-  const isSubmissionPage = Boolean(useMatch(routerPath.SUBMISSION))
   const parentRef = useRef<HTMLImageElement>(null)
   const {
     isHover,
@@ -38,12 +37,18 @@ const Club = ({
   return (
     <>
       <S.Container
-        $isActive={isSubmissionPage && isHover}
+        $isActive={enableSquadModal && isHover}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <S.Emblem src={logo} alt={name} ref={parentRef} width='60' height='60' />
-        {isSubmissionPage && shouldRenderModal && isHover && (
+        <S.Emblem
+          src={logo}
+          alt={name}
+          ref={parentRef}
+          width='60'
+          height='60'
+        />
+        {enableSquadModal && shouldRenderModal && isHover && (
           <Suspense fallback={null}>
             <ClubSquadModalLazy
               teamId={id}

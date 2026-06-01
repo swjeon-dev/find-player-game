@@ -1,16 +1,18 @@
 import { memo, useRef } from 'react'
 
 import { useFetchingTeamPlayersData } from '@/hooks/data/useFetchingTeamPlayers'
-import { Loader, Name, PlayerList, PlayerRow } from './style'
+
 import { useModalPosition, useSelectPlayer } from '../model'
+import * as S from './ClubSquadModal.style'
 
 function Message({ message }: { message: string; isLoading?: boolean }) {
   return (
-    <Loader>
+    <S.Loader>
       <span>{message}</span>
-    </Loader>
+    </S.Loader>
   )
 }
+
 const Player = memo(function Player({
   name,
   handleClick,
@@ -19,9 +21,9 @@ const Player = memo(function Player({
   handleClick: (name: string) => void
 }) {
   return (
-    <PlayerRow onClick={() => handleClick(name)}>
-      <Name>{name}</Name>
-    </PlayerRow>
+    <S.PlayerRow onClick={() => handleClick(name)}>
+      <S.Name>{name}</S.Name>
+    </S.PlayerRow>
   )
 })
 
@@ -53,7 +55,7 @@ const ClubSquadModal = ({
 
   return (
     <>
-      <PlayerList ref={listRef} $isTransfer={isTransfer}>
+      <S.PlayerList ref={listRef} $isTransfer={isTransfer}>
         {isPending ? (
           <Message message='Loading...' />
         ) : error || !players?.length ? (
@@ -67,7 +69,7 @@ const ClubSquadModal = ({
             />
           ))
         )}
-      </PlayerList>
+      </S.PlayerList>
     </>
   )
 }
