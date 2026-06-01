@@ -6,7 +6,7 @@ import ProtectedRoute from '@/app/routes/ProtectedRoute'
 import RootLayout from '@/shared/ui/layout/RootLayout'
 import { Cover } from '@/pages/cover'
 import { ROUTER_PATH } from '@/shared'
-import { SkeletonBase } from '@/utils/skeletonUI'
+import { SkeletonBase } from '@/shared/ui/skeleton'
 import { NotFound } from '@/pages/not-found'
 
 const Submission = lazy(() =>

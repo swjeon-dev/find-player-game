@@ -1,4 +1,4 @@
-import { SkeletonBase } from '@/utils/skeletonUI'
+import { SkeletonBase } from '@/shared/ui/skeleton'
 import styled, { css } from 'styled-components'
 
 const ErrorBox = styled.div`
