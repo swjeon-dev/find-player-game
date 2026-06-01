@@ -10,7 +10,7 @@ import {
   queryClient,
   setupQueryPersist,
 } from '@/app/providers'
-import { theme } from '@/styles/theme'
+import { theme } from '@/shared/config'
 
 setupQueryPersist()
 
