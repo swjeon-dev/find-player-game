@@ -61,6 +61,7 @@ Firebase Realtime Database는 선수 정보가 `playerId` 단위로 저장되어
 - **Debounce 기반 자동완성 최적화**로 입력 중 불필요한 연산 감소
 - **상태 기반 UI 전환**으로 오답 / 정답 흐름 명확화
 - **CRA → Vite + TypeScript 마이그레이션**으로 개발 생산성과 안정성 개선
+- **개발 전용 Profiler를 dev/prod로 분리**해 운영 번들에서 디버깅 코드 제외
 
 ## 주요 기능
 
