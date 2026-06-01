@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useState } from 'react'
 import { useSetRecoilState } from 'recoil'
 
-import { inputState } from '@/state'
+import { inputState } from '@/entities/search/model'
 
 export const useSelectPlayer = (cb: () => void) => {
   const setValue = useSetRecoilState(inputState)

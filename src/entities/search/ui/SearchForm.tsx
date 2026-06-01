@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 
 import { useDebouncedValue } from '@/shared'
-import { inputState } from '@/state'
+import { inputState } from '../model'
 import type { IHint } from '@/types'
 import type { IFirebasePlayer } from '@/types'
 import { useFilteringPlayersName } from '@/entities/search/model'

@@ -5,7 +5,7 @@ import {
   leagueInfoState,
   useFetchingPlayersIdInLeague,
 } from '@/entities/league/model'
-import { quizState } from '@/widget/submission'
+import { quizState } from './quizState'
 
 import useFetchingPlayerData from './useFetchingPlayerData'
 

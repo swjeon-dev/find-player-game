@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useSetRecoilState } from 'recoil'
 
-import { inputState } from '@/state'
+import { inputState } from '@/entities/search'
 import type { IHint } from '@/types'
 
 interface IUseSubmissionGameProps {
