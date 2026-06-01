@@ -5,7 +5,7 @@ import { RecoilRoot } from 'recoil'
 import { HelmetProvider } from 'react-helmet-async'
 import { QueryClientProvider } from '@tanstack/react-query'
 
-import BrowserRouter from '@/app/BrowserRouter'
+import AppRouterProvider from '@/app/providers/AppRouterProvider'
 import { theme } from '@/styles/theme'
 import { queryClient } from '@/lib/queryClient'
 import { setupQueryPersist } from '@/lib/persistClient'
@@ -18,7 +18,7 @@ createRoot(document.getElementById('root') as HTMLElement).render(
       <HelmetProvider>
         <ThemeProvider theme={theme}>
           <RecoilRoot>
-            <BrowserRouter />
+            <AppRouterProvider />
           </RecoilRoot>
         </ThemeProvider>
       </HelmetProvider>
