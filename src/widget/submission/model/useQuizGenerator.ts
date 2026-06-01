@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
-import { useFetchingPlayersIdInLeague } from '@/entities/league/model'
-import { leagueInfoState, quizState } from '@/state'
+import {
+  leagueInfoState,
+  useFetchingPlayersIdInLeague,
+} from '@/entities/league/model'
+import { quizState } from '@/widget/submission'
 
 import useFetchingPlayerData from './useFetchingPlayerData'
 

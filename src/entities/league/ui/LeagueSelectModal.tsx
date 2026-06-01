@@ -6,12 +6,9 @@ import { useSetRecoilState } from 'recoil'
 import { ROUTER_PATH } from '@/shared'
 import { useDebouncedCallback } from '@/shared'
 import { queryClient } from '@/app/providers'
-import {
-  fetchPlayerIdsInLeague,
-  fetchTeamIdsInLeague,
-} from '@/shared/api'
+import { fetchPlayerIdsInLeague, fetchTeamIdsInLeague } from '@/shared/api'
 import { queryKeysMain } from '@/shared'
-import { leagueInfoState } from '@/state'
+import { leagueInfoState } from '@/entities/league'
 
 import emblemImage from '/emblem/pl.webp'
 import * as S from './LeagueSelectModal.style'

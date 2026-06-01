@@ -2,7 +2,7 @@ import { Navigate, Outlet } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 
 import { ROUTER_PATH } from '@/shared'
-import { leagueInfoState } from '@/state'
+import { leagueInfoState } from '@/entities/league'
 
 export default function ProtectedRoute() {
   const leagueInfo = useRecoilValue(leagueInfoState)

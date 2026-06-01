@@ -1,6 +1,6 @@
 import { useRecoilValue } from 'recoil'
 
-import { leagueInfoState } from '@/state'
+import { leagueInfoState } from '@/entities/league/model'
 
 import { Club } from '@/entities/club'
 import { useClubTabletPanel } from '@/entities/club/model'
