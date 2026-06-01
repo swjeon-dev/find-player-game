@@ -22,6 +22,10 @@ export default defineConfig(({ command }) => ({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      '@/shared/lib/dev':
+        command === 'build'
+          ? path.resolve(__dirname, './src/shared/lib/dev/index.prod.ts')
+          : path.resolve(__dirname, './src/shared/lib/dev/index.ts'),
     },
   },
   build: {
