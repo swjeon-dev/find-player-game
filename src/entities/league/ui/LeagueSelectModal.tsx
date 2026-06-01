@@ -5,10 +5,13 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useSetRecoilState } from 'recoil'
 
 import { ROUTER_PATH } from '@/shared'
-import { useDebouncedCallback } from '@/shared'
-import { fetchPlayerIdsInLeague, fetchTeamIdsInLeague } from '@/shared/api'
-import { queryKeysMain } from '@/shared'
-import { leagueInfoState } from '@/entities/league'
+import {
+  fetchPlayerIdsInLeague,
+  fetchTeamIdsInLeague,
+  queryKeysMain,
+  useDebouncedCallback,
+} from '@/shared'
+import { leagueInfoState } from '../model'
 
 import emblemImage from '/emblem/pl.webp'
 import * as S from './LeagueSelectModal.style'
@@ -67,27 +70,30 @@ function LeagueSelectModalContainer({ children }: LeagueSelectModalProps) {
     navigate(ROUTER_PATH.SUBMISSION)
   }
 
-  const prefetchLeagueData = useCallback((leagueId: leagueListProps['id']) => {
-    const teamsIds = queryClient.getQueryData<number[]>(
-      queryKeysMain.teams.idsByLeaguePersisted(leagueId),
-    )
-    if (!teamsIds?.length) {
-      void queryClient.prefetchQuery({
-        queryKey: queryKeysMain.teams.idsByLeaguePersisted(leagueId),
-        queryFn: () => fetchTeamIdsInLeague(leagueId),
-      })
-    }
+  const prefetchLeagueData = useCallback(
+    (leagueId: leagueListProps['id']) => {
+      const teamsIds = queryClient.getQueryData<number[]>(
+        queryKeysMain.teams.idsByLeaguePersisted(leagueId),
+      )
+      if (!teamsIds?.length) {
+        void queryClient.prefetchQuery({
+          queryKey: queryKeysMain.teams.idsByLeaguePersisted(leagueId),
+          queryFn: () => fetchTeamIdsInLeague(leagueId),
+        })
+      }
 
-    const playersId = queryClient.getQueryData<number[]>(
-      queryKeysMain.players.idsByLeaguePersisted(leagueId),
-    )
-    if (!playersId?.length) {
-      void queryClient.prefetchQuery({
-        queryKey: queryKeysMain.players.idsByLeaguePersisted(leagueId),
-        queryFn: () => fetchPlayerIdsInLeague(leagueId),
-      })
-    }
-  }, [queryClient])
+      const playersId = queryClient.getQueryData<number[]>(
+        queryKeysMain.players.idsByLeaguePersisted(leagueId),
+      )
+      if (!playersId?.length) {
+        void queryClient.prefetchQuery({
+          queryKey: queryKeysMain.players.idsByLeaguePersisted(leagueId),
+          queryFn: () => fetchPlayerIdsInLeague(leagueId),
+        })
+      }
+    },
+    [queryClient],
+  )
 
   const prefetchingLeagueData = useDebouncedCallback(prefetchLeagueData, 200)
 

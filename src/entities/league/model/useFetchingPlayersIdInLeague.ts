@@ -1,8 +1,7 @@
 import { useEffect } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { fetchPlayerIdsInLeague } from '@/shared/api'
-import { queryKeysMain } from '@/shared'
+import { fetchPlayerIdsInLeague, queryKeysMain } from '@/shared'
 
 const useFetchingPlayersIdInLeague = ({ leagueId }: { leagueId: number }) => {
   const queryClient = useQueryClient()
