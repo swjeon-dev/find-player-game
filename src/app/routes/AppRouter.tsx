@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import ProtectedRoute from '@/app/routes/ProtectedRoute'
 import RootLayout from '@/shared/ui/layout/RootLayout'
 import { Cover } from '@/pages/cover'
-import routerPath from '@/constant/routerPath'
+import { ROUTER_PATH } from '@/shared'
 import { SkeletonBase } from '@/utils/skeletonUI'
 import { NotFound } from '@/pages/not-found'
 
@@ -22,7 +22,7 @@ const RouteFallback = styled(SkeletonBase)`
 
 const routes = [
   {
-    path: routerPath.HOME,
+    path: ROUTER_PATH.HOME,
     element: <RootLayout />,
     children: [
       {
@@ -30,7 +30,7 @@ const routes = [
         element: <Cover />,
       },
       {
-        path: routerPath.SUBMISSION,
+        path: ROUTER_PATH.SUBMISSION,
         element: <ProtectedRoute />,
         children: [
           {

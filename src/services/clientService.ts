@@ -1,6 +1,6 @@
 import { firebaseApiInstance } from '@/lib/firebaseClient'
 import { getFirebaseURLPath, type FirebaseReturnPath } from '@/lib/firebasePath'
-import { FIREBASE_API_ENDPOINT } from '@/constant/firebaseRoutes'
+import { FIREBASE_API_ENDPOINT } from '@/shared'
 import type { IFirebasePlayer, IFirebaseTeamDetail } from '@/types'
 
 export type FilteringPlayerNode = {

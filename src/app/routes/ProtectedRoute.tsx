@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 
-import routerPath from '@/constant/routerPath'
+import { ROUTER_PATH } from '@/shared'
 import { leagueInfoState } from '@/state'
 
 export default function ProtectedRoute() {
@@ -14,7 +14,7 @@ export default function ProtectedRoute() {
 
   if (!leagueInfo.id) {
     alert('먼저 리그를 선택해주세요.')
-    return <Navigate to={routerPath.HOME} replace />
+    return <Navigate to={ROUTER_PATH.HOME} replace />
   }
 
   return <Outlet />

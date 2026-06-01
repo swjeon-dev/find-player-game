@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSetRecoilState } from 'recoil'
 
-import routerPath from '@/constant/routerPath'
+import { ROUTER_PATH } from '@/shared'
 import { useDebouncedCallback } from '@/hooks/ui/useDebouncedCallback'
 import { queryClient } from '@/lib/queryClient'
 import {
@@ -66,7 +66,7 @@ function LeagueSelectModalContainer({ children }: LeagueSelectModalProps) {
 
   const setLeagueRange = (league: leagueListProps) => {
     setLeagueInfo({ id: league.id })
-    navigate(routerPath.SUBMISSION)
+    navigate(ROUTER_PATH.SUBMISSION)
   }
 
   const prefetchLeagueData = useCallback((leagueId: leagueListProps['id']) => {
