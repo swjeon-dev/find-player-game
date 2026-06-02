@@ -15,7 +15,7 @@
 ## 기술 포인트
 
 - **외부 API Rate Limit** — 클라이언트 직접 호출 대신 Firebase(Cloud Functions + Realtime Database)로 조회
-- **id 기반 DB + prefix 검색 제약** — 적재 데이터·Functions 수정 대신 **hover 보조 + prefetch + UX**로 체감 대기 줄이기
+- **id 기반 DB + prefix 검색 제약** — **커버·리그 모달·hover prefetch**로 조회·화면 흐름을 바꿔 체감 대기 완화 (Lighthouse 홈 LCP **24.5s → 3.2s**, TBT **690ms → 0ms**, [상세](docs/portfolio.md#perf-compare))
 - **React Query** — 캐싱·persist, 리그·팀 hover 시 미리 조회
 - **입력·화면** — prefix 자동완성, route lazy loading, 오답 힌트 / 정답 시 UI 전환
 - **코드 구조** — `components/`, `hooks/` 등 역할별 폴더를 **FSD 기준 리팩터링** (`pages` → `widget` → `entities`, `features`는 규모상 미도입)
