@@ -20,7 +20,8 @@
 - **입력·화면** — Debounce 자동완성, route lazy loading, 오답 힌트 / 정답 시 UI 전환
 - **코드 구조** — `components/`, `hooks/` 등 역할별 폴더를 **FSD 기준으로 리팩터링** (`pages` → `widget` → `entities`, `features`는 규모상 미도입)
 
-자세한 배경·회고·구조 설명은 [docs/portfolio.md](docs/portfolio.md)를 참고해 주세요.
+<!-- TODO: 블로그 or 포트폴리오 연결 예정 -->
+<!-- 자세한 배경·회고·구조 설명은 [docs/portfolio.md](docs/portfolio.md)를 참고해 주세요. -->
 
 ## 주요 기능
 
