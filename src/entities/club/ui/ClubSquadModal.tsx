@@ -47,7 +47,7 @@ const ClubSquadModal = ({
   } = useFetchingTeamPlayersData(teamId)
   const listRef = useRef<HTMLUListElement>(null)
 
-  const isTransfer = useModalPosition({
+  const { isReady, ...isTransfer } = useModalPosition({
     listRef,
     parentRef,
     triggerKey: teamId,
@@ -57,7 +57,7 @@ const ClubSquadModal = ({
 
   return (
     <>
-      <S.PlayerList ref={listRef} $isTransfer={isTransfer}>
+      <S.PlayerList ref={listRef} $isTransfer={isTransfer} $isVisible={isReady}>
         {isPending ? (
           <Message message='Loading...' />
         ) : error || !players?.length ? (

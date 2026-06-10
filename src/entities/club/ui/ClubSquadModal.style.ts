@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 export const PlayerList = styled.ul<{
   $isTransfer: { y: boolean; x: boolean }
+  $isVisible: boolean
 }>`
   position: absolute;
   top: 0;
@@ -15,6 +16,7 @@ export const PlayerList = styled.ul<{
   flex-direction: column;
   border-radius: 5px;
   overflow-y: auto;
+  visibility: ${props => (props.$isVisible ? 'visible' : 'hidden')};
 
   transform: ${props => {
     const { x, y } = props.$isTransfer
@@ -25,7 +27,7 @@ export const PlayerList = styled.ul<{
   }};
 
   animation: ${props =>
-    props.$isTransfer ? 'slide-in 0.3s ease-in-out' : 'none'};
+    props.$isVisible ? 'slide-in 0.3s ease-in-out' : 'none'};
 
   @keyframes slide-in {
     from {

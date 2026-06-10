@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useState } from 'react'
+import { useCallback, useLayoutEffect, useState } from 'react'
 import { useSetRecoilState } from 'recoil'
 
 import { inputState } from '@/entities/search'
@@ -26,8 +26,9 @@ export const useModalPosition = ({
   listRef,
   parentRef,
   triggerKey,
-}: IUseModalPositionProps): { x: boolean; y: boolean } => {
+}: IUseModalPositionProps): { x: boolean; y: boolean; isReady: boolean } => {
   const [isTransfer, setIsTransfer] = useState({ x: false, y: false })
+  const [isReady, setIsReady] = useState(false)
 
   const recalcPosition = useCallback(() => {
     if (!listRef.current || !parentRef.current) return
@@ -40,21 +41,24 @@ export const useModalPosition = ({
     const isTransferXPosition = innerWidth - rect.right + 50 < clientWidth
 
     setIsTransfer({ x: isTransferXPosition, y: isTransferYPosition })
+    setIsReady(true)
   }, [listRef, parentRef])
+
+  useLayoutEffect(() => {
+    setIsReady(false)
+    setIsTransfer({ x: false, y: false })
+  }, [triggerKey])
 
   useLayoutEffect(() => {
     if (!listRef.current) return
 
-    const observer = new ResizeObserver(recalcPosition)
+    recalcPosition()
 
-    observer.observe(listRef.current as Element)
+    const observer = new ResizeObserver(recalcPosition)
+    observer.observe(listRef.current)
 
     return () => observer.disconnect()
   }, [recalcPosition, triggerKey])
 
-  useEffect(() => {
-    recalcPosition()
-  }, [triggerKey, recalcPosition])
-
-  return isTransfer
+  return { ...isTransfer, isReady }
 }
