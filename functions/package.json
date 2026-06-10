@@ -1,8 +1,10 @@
 {
   "name": "functions",
   "scripts": {
-    "build": "tsc && tsc-alias",
-    "build:watch": "tsc --watch",
+    "prepare-common": "node scripts/prepare-common.js",
+    "prebuild": "npm run prepare-common",
+    "build": "npm run prepare-common && tsc -p tsconfig.build.json && node scripts/copy-common-to-lib.js && tsc-alias -p tsconfig.build.json",
+    "build:watch": "npm run prepare-common && tsc -p tsconfig.build.json --watch",
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",

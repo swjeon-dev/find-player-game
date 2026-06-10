@@ -1,10 +1,4 @@
-export interface IFirebasePlayer extends IPlayer {
-  teamId: number
-  teamLogo: string
-  leagueId: number
-}
-
-export interface IPlayer {
+interface IPlayer {
   id: number
   name: string
   age: number
@@ -13,9 +7,17 @@ export interface IPlayer {
   position: keyof typeof Position
 }
 
-export enum Position {
+interface IFirebasePlayer extends IPlayer {
+  teamId: number
+  teamLogo: string
+  leagueId: number
+}
+
+enum Position {
   'Goalkeeper' = 'GK',
   'Defender' = 'DF',
   'Midfielder' = 'MD',
   'Attacker' = 'FW',
 }
+
+export { type IFirebasePlayer, type IPlayer, Position }

@@ -1,4 +1,4 @@
-import type { IFirebasePlayer } from './player.types'
+import type { IFirebasePlayer } from '@common/model'
 
 export interface IHint {
   q: IFirebasePlayer

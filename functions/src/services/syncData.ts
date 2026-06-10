@@ -6,8 +6,8 @@ import {
 } from './externalService'
 import { adminDb } from '../firebase/config'
 import { ServerValue } from 'firebase-admin/database'
-import { DEFAULT_API_PARAMS } from '../constant/params'
-import type { IFirebasePlayer } from '../api/api.types'
+import { DEFAULT_API_PARAMS } from '@common/config'
+import type { IFirebasePlayer } from '@common/model'
 import { fetchErrorLogger } from '../api/api'
 
 type IFirebaseObject = Record<string, any>

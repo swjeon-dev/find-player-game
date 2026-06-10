@@ -1,4 +1,4 @@
-import type { IPlayer } from '../api/api.types'
+import type { IPlayer } from '@common/model'
 
 // request: teams in league
 export interface IGetLeagueTable {
