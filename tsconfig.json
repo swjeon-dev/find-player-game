@@ -29,7 +29,9 @@
     "ignoreDeprecations": "5.0",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@common": ["common"],
+      "@common/*": ["common/*"]
     }
   },
   "include": ["src"],

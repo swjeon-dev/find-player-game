@@ -21,6 +21,7 @@ export default defineConfig(({ command }) => ({
   base,
   resolve: {
     alias: {
+      '@common': path.resolve(__dirname, './common'),
       '@': path.resolve(__dirname, './src'),
       '@/shared/lib/dev':
         command === 'build'
