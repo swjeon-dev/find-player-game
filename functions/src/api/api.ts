@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export const fetchErrorLogger = (error: unknown, context?: string) => {
+const fetchErrorLogger = (error: unknown, context?: string) => {
   let message = '알 수 없는 오류가 발생했습니다.'
   const prefix = context ? `[${context}] ` : ''
 
@@ -16,3 +16,5 @@ export const fetchErrorLogger = (error: unknown, context?: string) => {
 
   console.error(`${prefix}❌ 최종 에러 메시지:`, message)
 }
+
+export { fetchErrorLogger }
