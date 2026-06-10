@@ -3,7 +3,8 @@ import {
   getFirebaseURLPath,
   type FirebaseReturnPath,
 } from '../config/firebasePath'
-import type { IFirebasePlayer, IFirebaseTeamDetail } from '../types'
+import type { IFirebaseTeamDetail } from '../types'
+import type { IFirebasePlayer } from '@common/model'
 import { firebaseApiInstance } from './client'
 
 export type FilteringPlayerNode = {

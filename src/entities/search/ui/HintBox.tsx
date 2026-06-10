@@ -1,4 +1,5 @@
-import { type IFirebasePlayer, Position } from '@common/model'
+import { Position } from '@common/model'
+import type { IFirebasePlayer } from '@common/model'
 import type { IHint } from '@/shared'
 
 import * as S from './HintBox.style'
