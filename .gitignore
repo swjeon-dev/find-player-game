@@ -5,6 +5,7 @@
 /.pnp
 .pnp.js
 
+/common/dist
 /dist_old
 /dist
 dist/stats.html
