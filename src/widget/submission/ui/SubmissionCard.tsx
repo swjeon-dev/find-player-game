@@ -1,6 +1,6 @@
 import { useRecoilValue } from 'recoil'
 
-import { SearchForm, HintBox } from '@/entities/search'
+import { SearchForm, HintBox } from '@/features/search'
 import { quizState } from '../model'
 import ChangeButton from './ChangeButton'
 import { useSubmissionGame } from '../model'
