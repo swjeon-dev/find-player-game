@@ -1,10 +1,11 @@
 import { useRecoilValue } from 'recoil'
 
-import { Club, useClubTabletPanel } from '@/entities/club'
+import { useClubTabletPanel } from '@/entities/club'
 import {
   leagueInfoState,
   useFetchingTeamsDataInLeague,
 } from '@/entities/league'
+import { ClubWithSquadSelect } from '@/features/squad-select'
 import * as S from './ClubViews.style'
 
 /**
@@ -85,13 +86,12 @@ const ClubViews = () => {
               ))
             : teamIds.map((teamId, idx) => {
                 const q = teamDatasQuery[idx]
-                if (q?.data) {
+                    if (q?.data) {
                   return (
-                    <Club
+                    <ClubWithSquadSelect
                       key={teamId}
                       {...q.data}
                       offTablet={closeTabletPanel}
-                      enableSquadModal
                     />
                   )
                 }

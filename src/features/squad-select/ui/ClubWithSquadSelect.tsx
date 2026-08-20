@@ -1,21 +1,20 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { lazy, memo, Suspense, useEffect, useRef } from 'react'
 
-import { useClubSquadModalTrigger, prefetchTeamPlayersId } from '../model'
+import { prefetchTeamPlayersId } from '@/entities/club'
 import type { IFirebaseTeamDetail } from '@/shared'
-import * as S from './Club.style'
+import * as S from './ClubWithSquadSelect.style'
+import { useClubSquadModalTrigger } from '../model'
 
 const ClubSquadModalLazy = lazy(() => import('./ClubSquadModal'))
 
-const Club = ({
+const ClubWithSquadSelect = ({
   logo,
   name,
   id,
   offTablet,
-  enableSquadModal = false,
 }: IFirebaseTeamDetail & {
   offTablet: () => void
-  enableSquadModal?: boolean
 }) => {
   const queryClient = useQueryClient()
   const parentRef = useRef<HTMLImageElement>(null)
@@ -35,7 +34,7 @@ const Club = ({
   return (
     <>
       <S.Container
-        $isActive={enableSquadModal && isHover}
+        $isActive={isHover}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
@@ -46,7 +45,7 @@ const Club = ({
           width='60'
           height='60'
         />
-        {enableSquadModal && shouldRenderModal && isHover && (
+        {shouldRenderModal && isHover && (
           <Suspense fallback={null}>
             <ClubSquadModalLazy
               teamId={id}
@@ -60,4 +59,4 @@ const Club = ({
   )
 }
 
-export default memo(Club)
+export default memo(ClubWithSquadSelect)

@@ -1,10 +1,7 @@
 import { memo, useRef } from 'react'
 
-import {
-  useFetchingTeamPlayersData,
-  useModalPosition,
-  useSelectPlayer,
-} from '../model'
+import { useFetchingTeamPlayersData } from '@/entities/club'
+import { useModalPosition, useSelectPlayer } from '../model'
 import * as S from './ClubSquadModal.style'
 
 function Message({ message }: { message: string; isLoading?: boolean }) {
