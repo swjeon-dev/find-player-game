@@ -1,25 +1,5 @@
-import styled from 'styled-components'
+import { Section } from '@/widget/cover'
 import { Helmet } from 'react-helmet-async'
-
-import { LeagueSelectModalTrigger } from '@/entities'
-
-const CoverSection = styled.section`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`
-
-const SectionHeading = styled.h2`
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-`
 
 const Cover = () => {
   return (
@@ -33,10 +13,7 @@ const Cover = () => {
         <meta name='googlebot' content='index, follow' />
       </Helmet>
 
-      <CoverSection aria-labelledby='cover-game-heading'>
-        <SectionHeading id='cover-game-heading'>Game Start</SectionHeading>
-        <LeagueSelectModalTrigger />
-      </CoverSection>
+      <Section />
     </>
   )
 }
