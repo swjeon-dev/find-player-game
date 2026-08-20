@@ -1,11 +1,11 @@
 import { useRecoilValue } from 'recoil'
 
-import { useClubTabletPanel } from '@/entities/club'
 import {
   leagueInfoState,
   useFetchingTeamsDataInLeague,
 } from '@/entities/league'
 import { ClubWithSquadSelect } from '@/features/squad-select'
+import { useClubTabletPanel } from '../model'
 import * as S from './ClubViews.style'
 
 /**

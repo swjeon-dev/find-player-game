@@ -1,4 +1,3 @@
-export { useClubTabletPanel } from './useClubTabletPanel'
 export {
   useFetchingTeamPlayersData,
   prefetchTeamPlayersId,
