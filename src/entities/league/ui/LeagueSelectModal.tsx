@@ -12,27 +12,9 @@ import {
   useDebouncedCallback,
 } from '@/shared'
 import { leagueInfoState } from '../model'
+import { leagueList, type leagueListProps } from '../model/league.types'
 
-import emblemImage from '/emblem/pl.webp'
 import * as S from './LeagueSelectModal.style'
-
-// temp
-interface leagueListProps {
-  name: string
-  id: number
-  // season: number
-  // webp image
-  emblemImage: string
-}
-
-const leagueList: leagueListProps[] = [
-  {
-    name: 'pl',
-    id: 39,
-    // season: 2024, // 26년 기준 최신
-    emblemImage,
-  },
-]
 
 interface LeagueSelectModalProps {
   children: (handlers: { openModal: () => void }) => React.ReactNode
