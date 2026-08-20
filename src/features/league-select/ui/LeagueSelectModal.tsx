@@ -11,8 +11,8 @@ import {
   queryKeysMain,
   useDebouncedCallback,
 } from '@/shared'
-import { leagueInfoState } from '../model'
-import { leagueList, type leagueListProps } from '../model/league.types'
+import { leagueInfoState } from '@/entities/league'
+import { leagueList, type leagueListProps } from '../model'
 
 import * as S from './LeagueSelectModal.style'
 

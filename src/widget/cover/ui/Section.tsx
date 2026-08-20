@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { LeagueSelectModalTrigger } from '@/entities/league'
+import { LeagueSelectModalTrigger } from '@/features/league-select'
 
 const CoverSection = styled.section`
   width: 100%;
