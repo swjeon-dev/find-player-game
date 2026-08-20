@@ -1,6 +1,7 @@
 import { Helmet } from 'react-helmet-async'
 
-import { ClubViews, SubmissionGameContainer } from '@/widget'
+import { ClubViews } from '@/widget'
+import { SubmissionGameContainer } from '@/features/submission'
 
 function Submission() {
   return (
