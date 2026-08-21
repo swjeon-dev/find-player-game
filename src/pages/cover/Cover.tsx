@@ -1,18 +1,11 @@
+import { SITE_DESCRIPTION } from '@/shared'
+import PageMeta from '@/shared/ui/PageMeta'
 import { Section } from '@/widget/cover'
-import { Helmet } from 'react-helmet-async'
 
 const Cover = () => {
   return (
     <>
-      <Helmet>
-        <title>Find Football Player</title>
-        <meta name='description' content='Home | Find Football Player' />
-        <meta name='keywords' content='Find Football Player' />
-        <meta name='author' content='up1' />
-        <meta name='robots' content='index, follow' />
-        <meta name='googlebot' content='index, follow' />
-      </Helmet>
-
+      <PageMeta description={SITE_DESCRIPTION} path='/' />
       <Section />
     </>
   )

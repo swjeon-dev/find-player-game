@@ -1,19 +1,17 @@
 import { Helmet } from 'react-helmet-async'
 
-import { ROUTER_PATH } from '@/shared'
+import { PageMeta, ROUTER_PATH } from '@/shared'
 
 import * as S from './NotFound.style'
 
 function NotFound() {
   return (
     <>
-      <Helmet>
-        <title>404 | Find Football Player</title>
-        <meta
-          name='description'
-          content='요청하신 페이지를 찾을 수 없습니다. Find Football Player 홈으로 돌아가 다시 시작해보세요.'
-        />
-      </Helmet>
+      <PageMeta
+        title='404'
+        description='요청하신 페이지를 찾을 수 없습니다.'
+        noIndex
+      />
 
       <S.Page>
         <S.Card>
