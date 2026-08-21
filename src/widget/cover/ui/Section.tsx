@@ -4,6 +4,7 @@ import { LeagueSelectModalTrigger } from '@/features/league-select'
 
 const CoverSection = styled.section`
   width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
 `
