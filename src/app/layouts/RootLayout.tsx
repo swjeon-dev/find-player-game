@@ -1,9 +1,8 @@
 import { Outlet } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import styled from 'styled-components'
-import { useEffect, useRef, useState } from 'react'
 
-import { Header } from '@/widget/header'
+import { Header, useHeaderObserver } from '@/widget/header'
 
 const Container = styled.div<{ $height: number }>`
   display: flex;
@@ -19,19 +18,7 @@ const Container = styled.div<{ $height: number }>`
 `
 
 function RootLayout() {
-  const [headerHeight, setHeaderHeight] = useState(0)
-  const headerRef = useRef<HTMLElement>(null)
-
-  useEffect(() => {
-    if (!headerRef.current) return
-    const observer = new ResizeObserver(entries => {
-      setHeaderHeight(entries[0].borderBoxSize[0].blockSize)
-    })
-
-    observer.observe(headerRef.current)
-
-    return () => observer.disconnect()
-  }, [])
+  const { height: headerHeight, headerRef } = useHeaderObserver()
 
   return (
     <>
