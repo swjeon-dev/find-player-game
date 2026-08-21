@@ -3,7 +3,8 @@ import { createBrowserRouter } from 'react-router-dom'
 import styled from 'styled-components'
 
 import ProtectedRoute from './ProtectedRoute'
-import { RootLayout, ROUTER_PATH, SkeletonBase } from '@/shared'
+import { RootLayout } from '../layouts'
+import { ROUTER_PATH, SkeletonBase } from '@/shared'
 import { Cover } from '@/pages/cover'
 import { NotFound } from '@/pages/not-found'
 

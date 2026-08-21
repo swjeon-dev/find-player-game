@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import styled from 'styled-components'
 
-import Header from './Header'
+import { Header } from '@/widget/header'
 
 const Container = styled.div`
   display: flex;
