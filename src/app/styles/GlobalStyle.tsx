@@ -5,6 +5,7 @@ export const GlobalStyle = createGlobalStyle`
   ${reset}
   * {
     box-sizing: border-box;
+    overscroll-behavior: none;
   }
   body {
     width: 100%;
