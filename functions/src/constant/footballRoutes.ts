@@ -1,4 +1,4 @@
-export const FOOTBAL_API_ENDPOINT = {
-  LEAGUE_TABLE: `/teams`, // ?league=${league}&season=${season}
-  TEAM_SQUADS: `/players/squads`, // ?team=${teamId}
+export const FOOTBALL_API_ENDPOINT = {
+  LEAGUE_TEAMS: '/teams',
+  TEAM_SQUADS: '/players/squads',
 } as const

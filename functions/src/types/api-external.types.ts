@@ -1,25 +1,27 @@
 import type { IPlayer } from '@common/model'
 
-// request: teams in league
-export interface IGetLeagueTable {
+interface IPaging {
+  current: number
+  total: number
+}
+
+export interface IGetLeagueTeams {
   get: string
-  parameters: IGetLeagueTableParameters
-  errors: any[]
+  parameters: {
+    league: string
+    season: string
+  }
+  errors: unknown
   results: number
   paging: IPaging
-  response: IResponse[]
+  response: ILeagueTeamEntry[]
 }
 
-export interface IGetLeagueTableParameters {
-  league: string
-  season: string
+export interface ILeagueTeamEntry {
+  team: ITeam
 }
 
-export interface IResponse {
-  team: ITeam1
-}
-
-export interface ITeam1 {
+export interface ITeam {
   id: number
   name: string
   code: string
@@ -29,32 +31,22 @@ export interface ITeam1 {
   logo: string
 }
 
-// request: squad
 export interface IGetTeamSquads {
   get: string
-  parameters: IGetTeamSquadsParameters
-  errors: any[]
+  parameters: {
+    team: string
+  }
+  errors: unknown
   results: number
   paging: IPaging
-  response: IGetTeamSquadsResponse[]
+  response: ITeamSquad[]
 }
 
-export interface IGetTeamSquadsParameters {
-  team: string
-}
-
-export interface IGetTeamSquadsResponse {
-  team: ITeam2
+export interface ITeamSquad {
+  team: {
+    id: number
+    name: string
+    logo: string
+  }
   players: IPlayer[]
-}
-
-export interface ITeam2 {
-  id: number
-  name: string
-  logo: string
-}
-
-export interface IPaging {
-  current: number
-  total: number
 }

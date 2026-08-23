@@ -5,7 +5,7 @@ import { syncData } from './services/syncData'
 // 공통 옵션 (필요시 개별 함수에서 덮어쓰기 가능)
 const defaultOptions: HttpsOptions = {
   region: 'us-central1',
-  timeoutSeconds: 300, // 루프 처리를 위해 넉넉히 설정
+  timeoutSeconds: 540, // 팀 사이 대기 + rate limit 재시도 여유
   memory: '512MiB',
   invoker: 'public',
 }
