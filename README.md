@@ -9,9 +9,9 @@ CRA + JavaScript를 **Vite + TypeScript**로 옮기며, 외부 API 제약 속에
 ## Demo
 
 - Live: [swjeon-dev.github.io/find-player-game](https://swjeon-dev.github.io/find-player-game/)
-- [시연 영상](https://github.com/user-attachments/assets/37036cd6-3ea5-42fa-837c-c987919557b6)
 
-[![Quiz Demo](src/assets/imgs/auto-complete.webp)](https://github.com/user-attachments/assets/37036cd6-3ea5-42fa-837c-c987919557b6)
+- 시연 영상
+  [![Quiz Demo](src/assets/imgs/auto-complete.webp)](https://github.com/user-attachments/assets/37036cd6-3ea5-42fa-837c-c987919557b6)
 
 ## 기술 포인트
 
