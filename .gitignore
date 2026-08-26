@@ -8,6 +8,7 @@
 /common/dist
 /dist_old
 /dist
+/_archive
 dist/stats.html
 .lighthouseci
 

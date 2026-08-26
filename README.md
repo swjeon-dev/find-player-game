@@ -1,34 +1,33 @@
-# ⚽ Find Football Player Quiz
+# Find Football Player Quiz
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://swjeon-dev.github.io/find-player-game/) ![Deploy Status](https://img.shields.io/github/actions/workflow/status/swjeon-dev/find-player-game/deploy.yml?branch=master&style=flat-square&label=Deploy&logo=GitHub%20Actions&logoColor=white)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-success)](https://swjeon-dev.github.io/find-player-game/)
+![Deploy Status](https://img.shields.io/github/actions/workflow/status/swjeon-dev/find-player-game/deploy.yml?branch=master&style=flat-square&label=Deploy&logo=GitHub%20Actions&logoColor=white)
 
-블러 처리된 프리미어리그 선수 사진을 보고 이름을 맞히는 **축구 선수 퀴즈**입니다.  
-**CRA + JavaScript**로 시작한 프로젝트를 **Vite + TypeScript**로 옮기고, API·DB 제약 속에서도 **쓰기 편한 검색·퀴즈 경험**을 만드는 데 집중했습니다.
+블러 처리된 프리미어리그 선수 사진을 보고 이름을 맞히는 퀴즈입니다.  
+CRA + JavaScript를 **Vite + TypeScript**로 옮기며, 외부 API 제약 속에서도 검색·퀴즈가 끊기지 않게 맞춘 프로젝트입니다.
 
-## 데모
+## Demo
 
-- [Live Demo](https://swjeon-dev.github.io/find-player-game/)
+- Live: [swjeon-dev.github.io/find-player-game](https://swjeon-dev.github.io/find-player-game/)
 - [시연 영상](https://github.com/user-attachments/assets/37036cd6-3ea5-42fa-837c-c987919557b6)
 
-[![Quiz Demo Thumbnail](src/assets/imgs/auto-complete.webp)](https://github.com/user-attachments/assets/37036cd6-3ea5-42fa-837c-c987919557b6)
+[![Quiz Demo](src/assets/imgs/auto-complete.webp)](https://github.com/user-attachments/assets/37036cd6-3ea5-42fa-837c-c987919557b6)
 
 ## 기술 포인트
 
-- **외부 API Rate Limit** — 클라이언트 직접 호출 대신 Firebase(Cloud Functions + Realtime Database)로 조회
-- **id 기반 DB + prefix 검색 제약** — **커버·리그 모달·hover prefetch**로 조회·화면 흐름을 바꿔 체감 대기 완화 (Lighthouse 홈 LCP **24.5s → 3.2s**, TBT **690ms → 0ms**, [상세](docs/portfolio.md#perf-compare))
-- **React Query** — 캐싱·persist, 리그·팀 hover 시 미리 조회
-- **입력·화면** — prefix 자동완성, route lazy loading, 오답 힌트 / 정답 시 UI 전환
-- **코드 구조** — `components/`, `hooks/` 등 역할별 폴더를 **FSD 기준 리팩터링** (`pages` → `widget` → `entities`, `features`는 규모상 미도입)
+- **조회 경로** — 클라이언트가 외부 API를 직접 치지 않고, Cloud Functions가 적재한 Realtime Database만 읽습니다.
+- **검색 UX** — id 기반 DB·prefix 검색 제약은 스키마를 바꾸지 않고, 커버 → 리그 모달 → 팀 hover prefetch로 체감 대기를 줄였습니다. (Lighthouse 홈 LCP 24.5s → 3.2s, TBT 690ms → 0ms)
+- **코드 구조** — `components/`·`hooks/` 역할별 폴더를 FSD 기준으로 나눴습니다. (`pages` → `widget` → `entities`)
 
-## 주요 기능
+## 기능
 
 - 블러 이미지 퀴즈, prefix 자동완성
-- 팀 메뉴 hover로 선수 이름 확인 후 입력
-- 오답 시 힌트, 정답 시 원본 이미지·입력 비활성화
+- 팀 hover로 선수 목록 확인·선택
+- 오답 힌트, 정답 시 원본 이미지·입력 비활성화
 
-## 기술 스택
+## 스택
 
-React · TypeScript · Vite · Styled Components · React Query · Recoil · Firebase · GitHub Actions
+React · TypeScript · Vite · Styled Components · React Query · Recoil · Firebase (Cloud Functions + Realtime Database)
 
 ## 실행
 
