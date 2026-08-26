@@ -1,29 +1,55 @@
 # Find Football Player Quiz
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-success)](https://swjeon-dev.github.io/find-player-game/)
-![Deploy Status](https://img.shields.io/github/actions/workflow/status/swjeon-dev/find-player-game/deploy.yml?branch=master&style=flat-square&label=Deploy&logo=GitHub%20Actions&logoColor=white)
 
-블러 처리된 프리미어리그 선수 사진을 보고 이름을 맞히는 퀴즈입니다.  
-CRA + JavaScript를 **Vite + TypeScript**로 옮기며, 외부 API 제약 속에서도 검색·퀴즈가 끊기지 않게 맞춘 프로젝트입니다.
+블러 처리된 프리미어리그 선수 사진을 보고 이름을 맞히는 퀴즈의 **Vite + TypeScript SPA**입니다.
 
 ## Demo
 
-- Live: [swjeon-dev.github.io/find-player-game](https://swjeon-dev.github.io/find-player-game/)
+<!-- - Live: [swjeon-dev.github.io/find-player-game](https://swjeon-dev.github.io/find-player-game/) -->
 
-- 시연 영상
-  [![Quiz Demo](src/assets/imgs/auto-complete.webp)](https://github.com/user-attachments/assets/37036cd6-3ea5-42fa-837c-c987919557b6)
+- [![시연 영상](src/assets/imgs/auto-complete.webp)](https://github.com/user-attachments/assets/37036cd6-3ea5-42fa-837c-c987919557b6)
 
-## 기술 포인트
+## Work
 
-- **조회 경로** — 클라이언트가 외부 API를 직접 치지 않고, Cloud Functions가 적재한 Realtime Database만 읽습니다.
-- **검색 UX** — id 기반 DB·prefix 검색 제약은 스키마를 바꾸지 않고, 커버 → 리그 모달 → 팀 hover prefetch로 체감 대기를 줄였습니다. (Lighthouse 홈 LCP 24.5s → 3.2s, TBT 690ms → 0ms)
-- **코드 구조** — `components/`·`hooks/` 역할별 폴더를 FSD 기준으로 나눴습니다. (`pages` → `widget` → `entities`)
+- 클라이언트는 외부 API 대신 Cloud Functions가 적재한 Realtime Database만 읽습니다.
+- 홈 / 퀴즈 분리, 리그 선택·팀 hover prefetch. (Lighthouse 홈 LCP 24.5s → 3.2s)
+- `components/`·`hooks/` 역할별 폴더를 FSD 기준으로 나눔.
 
-## 기능
+## 코드 구조
 
-- 블러 이미지 퀴즈, prefix 자동완성
-- 팀 hover로 선수 목록 확인·선택
-- 오답 힌트, 정답 시 원본 이미지·입력 비활성화
+역할별 폴더에서는 파일이 퀴즈용인지 검색용인지 폴더만으로는 안 보였습니다.  
+**Feature-Sliced Design**을 참고해 도메인·화면 단위로 나눴습니다.
+
+**이전 (역할별)**
+
+```text
+src/
+  components/
+  hooks/
+  utils/
+  constant/
+  services/
+```
+
+**이후 (이 레포)**
+
+```text
+src/
+  app/          providers, routes, layouts
+  pages/        cover, submission, not-found
+  widget/       club, cover, header
+  features/     search, league-select, squad-select, submission
+  entities/     club, league
+  shared/       api, ui, config
+functions/      Football API → RTDB 적재
+```
+
+```text
+pages/ → widget/ → features/ → entities/ → shared/
+```
+
+Next App Router로 옮긴 구조는 [find-player-next README](https://github.com/swjeon-dev/find-player-next#코드-구조)를 보면 됩니다.
 
 ## 스택
 
